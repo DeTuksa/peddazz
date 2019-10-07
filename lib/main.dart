@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:peddazz/login.dart';
-import 'package:peddazz/signup.dart';
-import 'package:peddazz/home.dart';
+import 'package:peddazz/authentication/login.dart';
+import 'package:peddazz/authentication/signup.dart';
+import 'package:peddazz/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 GlobalKey globalKey = new GlobalKey();

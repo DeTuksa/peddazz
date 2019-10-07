@@ -1,6 +1,6 @@
-import 'package:peddazz/drawer_controller.dart' as prefix0;
+import 'package:peddazz/home/drawer_controller.dart' as prefix0;
 import 'package:flutter/material.dart';
-import 'package:peddazz/home_drawer.dart';
+import 'package:peddazz/home/home_drawer.dart';
 
 class HomeScreen extends StatefulWidget
 {
