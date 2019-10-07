@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1036732048394",
+    "firebase_url": "https://peddaz-75b78.firebaseio.com",
+    "project_id": "peddaz-75b78",
+    "storage_bucket": "peddaz-75b78.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036732048394:android:d0844b6d8f077bff782bf3",
+        "android_client_info": {
+          "package_name": "com.asas.peddazz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1036732048394-l1kds6uerrh1c9jc8kqni97qtgr9n4bo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.asas.peddazz",
+            "certificate_hash": "777480c7635398a251c9bbf955409ec337a5c0be"
+          }
+        },
+        {
+          "client_id": "1036732048394-7rqepn84dur5tadnebqkp1rapsludj8h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0i9hB7uUCCTAwHdll1g-vfXvEMR_nnRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1036732048394-7rqepn84dur5tadnebqkp1rapsludj8h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
