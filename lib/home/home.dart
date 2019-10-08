@@ -65,7 +65,10 @@ class _HomeScreenState extends State<HomeScreen>
         setState(() {
           screenView = null;
         });
-      } else {
+      } else if (drawerIndex == DrawerIndex.Share) {
+        setState(() {
+          screenView = null;
+        });
         //do in your way......
       }
     }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'loading.dart';
+import 'package:peddazz/main.dart';
 
+GlobalKey<CustomCircularProgressIndicatorState> indicatorKey = new GlobalKey();
 
 class SignUp extends StatefulWidget
 {
@@ -190,13 +194,33 @@ class SignUpState extends State<SignUp>
                             ),
                             Padding(
                               padding: EdgeInsets.only(
+                                top: 60.0,
+                                left: MediaQuery.of(context).size.width*0.05,
+                                right: MediaQuery.of(context).size.width*0.05,
+                              ),
+                              child: CustomCircularProgressIndicator(
+                                key: indicatorKey,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
                                   top: 120.0,
                                   left: MediaQuery.of(context).size.width*0.05,
                                   right: MediaQuery.of(context).size.width*0.05),
                               child: Center(
                                 child: RaisedButton(
                                   color: Colors.deepPurple,
-                                  onPressed: null,
+                                  onPressed: () async {
+                          if (formKey.currentState.validate()) {
+                            indicatorKey.currentState.setState(() {
+                              indicatorKey.currentState.opacity = 1;
+                            });
+                            bool isSuccessful = await signUpWithEmail();
+                            if (isSuccessful == true) {
+                              Navigator.pop(context);
+                            }
+                          }
+                        },
                                   child: Text(
                                     "Signup",
                                     style: TextStyle(
@@ -257,14 +281,15 @@ class SignUpState extends State<SignUp>
       loadingVisible = !loadingVisible;
     });
   }
-/*
+
   Future<bool> signUpWithEmail() async {
     bool signUpSuccessful = false;
     try {
       MyApp.user = null;
       MyApp.user = (await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: eMail.text.trim() + '@st.futminna.edu.ng',
-          password: passWord.text.trim())) as FirebaseUser;
+        email: eMail.text.trim() + '@st.futminna.edu.ng',
+        password: passWord.text.trim(),
+      )).user;
     } catch (e) {
       print(e.toString());
     } finally {
@@ -297,7 +322,6 @@ class SignUpState extends State<SignUp>
     }
     return signUpSuccessful;
   }
-*/
 }
 
 class Record {
@@ -322,5 +346,40 @@ class Record {
       "email": email,
       "middleName": middleName,
     };
+  }
+}
+
+class CustomCircularProgressIndicator extends StatefulWidget {
+  CustomCircularProgressIndicator({Key key}) : super(key: key);
+  @override
+  State createState() => CustomCircularProgressIndicatorState();
+}
+
+class CustomCircularProgressIndicatorState
+    extends State<CustomCircularProgressIndicator> {
+  double opacity = 0;
+  @override
+  void initState() {
+    super.initState();
+    opacity = 0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Opacity(
+      opacity: opacity,
+      child: Center(
+        child: SizedBox(
+          width: 40,
+          height: 40,
+          child: CircularProgressIndicator(
+            backgroundColor: Colors.transparent,
+            valueColor: AlwaysStoppedAnimation(
+                Colors.deepPurpleAccent),
+            strokeWidth: 3,
+          ),
+        ),
+      ),
+    );
   }
 }
