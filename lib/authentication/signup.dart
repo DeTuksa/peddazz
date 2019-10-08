@@ -21,7 +21,6 @@ class SignUpState extends State<SignUp>
   final TextEditingController lastName = new TextEditingController();
   final TextEditingController eMail = new TextEditingController();
   final TextEditingController passWord = new TextEditingController();
-  final TextEditingController retypePassword = new TextEditingController();
   bool loadingVisible = false;
   bool autoValidate = false;
 
