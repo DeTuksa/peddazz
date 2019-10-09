@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 GlobalKey globalKey = new GlobalKey();
 
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -18,6 +19,8 @@ class MyApp extends StatelessWidget {
       title: 'PEDDAZ',
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
+        primaryColorDark: Color(0x2E2633),
+        
       ),
       home: handleCurrentScreen(),
       debugShowCheckedModeBanner: false,

@@ -132,7 +132,7 @@ class _DrawerState extends State<DrawerController> with TickerProviderStateMixin
                           height: MediaQuery.of(context).size.height,
                           width: widget.drawerWidth,
                           child: HomeDrawer(
-                            screenIndex: widget.screenIndex == null ? DrawerIndex.HOME : widget.screenIndex,
+                            screenIndex: widget.screenIndex == null ? DrawerIndex.Overview : widget.screenIndex,
                             iconAnimationController: iconController,
                             callBackIndex: (DrawerIndex indexType) {
                               onDrawerClick();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:peddazz/colors.dart';
 
 class HomeDrawer extends StatefulWidget {
   final AnimationController iconAnimationController;
@@ -24,34 +25,39 @@ class _HomeDrawerState extends State<HomeDrawer> {
   void setdDrawerListArray() {
     drawerList = [
       DrawerList(
-        index: DrawerIndex.HOME,
+        index: DrawerIndex.Overview,
         labelName: 'Overview',
         icon: new Icon(Icons.home),
       ),
       DrawerList(
-        index: DrawerIndex.Help,
+        index: DrawerIndex.Chats,
         labelName: 'Chats',
         icon: new Icon(Icons.mail),
       ),
       DrawerList(
-        index: DrawerIndex.FeedBack,
-        labelName: 'Timetable',
-        icon: new Icon(Icons.calendar_today),
+        index: DrawerIndex.Feed,
+        labelName: 'Feed',
+        icon: new Icon(Icons.trending_up),
       ),
       DrawerList(
-        index: DrawerIndex.Invite,
+        index: DrawerIndex.Planner,
         labelName: 'Planner',
         icon: new Icon(Icons.assignment),
       ),
       DrawerList(
-        index: DrawerIndex.Share,
-        labelName: 'Rate the app',
-        icon: new Icon(Icons.share),
+        index: DrawerIndex.Files,
+        labelName: 'My Files',
+        icon: new Icon(Icons.folder_shared),
       ),
       DrawerList(
-        index: DrawerIndex.About,
-        labelName: 'About Us',
-        icon: new Icon(Icons.info),
+        index: DrawerIndex.Timetable,
+        labelName: 'Timetable',
+        icon: new Icon(Icons.calendar_today),
+      ),
+      DrawerList(
+        index: DrawerIndex.Recordings,
+        labelName: 'Recordings',
+        icon: new Icon(Icons.mic),
       ),
     ];
   }
@@ -87,8 +93,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                   .value /
                               360),
                           child: Container(
-                            height: 120,
-                            width: 120,
+                            height: 80,
+                            width: 80,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               boxShadow: <BoxShadow>[
@@ -146,6 +152,19 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
           Column(
             children: <Widget>[
+              ListTile(
+                title: new Text(
+                  "Settings",
+                  style: new TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+                trailing: new Icon(
+                  Icons.settings
+                ),
+              ),
               ListTile(
                 title: new Text(
                   "Sign Out",
@@ -218,7 +237,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       : new Icon(listData.icon.icon,
                           color: widget.screenIndex == listData.index
                               ? Colors.deepPurple
-                              : Colors.blueGrey),
+                              : AppColor.icon),
                   Padding(
                     padding: EdgeInsets.all(4.0),
                   ),
@@ -281,13 +300,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
 }
 
 enum DrawerIndex {
-  HOME,
-  FeedBack,
-  Help,
-  Share,
-  About,
-  Invite,
-  Testing,
+  Overview,
+  Chats,
+  Feed,
+  Planner,
+  Files,
+  Timetable,
+  Recordings,
 }
 
 class DrawerList {

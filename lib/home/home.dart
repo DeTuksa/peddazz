@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState()
   {
-    drawerIndex = DrawerIndex.HOME;
+    drawerIndex = DrawerIndex.Overview;
     screenView = null;
     super.initState();
   }
@@ -49,27 +49,34 @@ class _HomeScreenState extends State<HomeScreen>
   void changeIndex(DrawerIndex drawerIndexdata) {
     if (drawerIndex != drawerIndexdata) {
       drawerIndex = drawerIndexdata;
-      if (drawerIndex == DrawerIndex.HOME) {
+      if (drawerIndex == DrawerIndex.Overview) {
         setState(() {
           screenView = null;
         });
-      } else if (drawerIndex == DrawerIndex.Help) {
+      } else if (drawerIndex == DrawerIndex.Chats) {
         setState(() {
           screenView = null;
         });
-      } else if (drawerIndex == DrawerIndex.FeedBack) {
+      } else if (drawerIndex == DrawerIndex.Feed) {
         setState(() {
           screenView = null;
         });
-      } else if (drawerIndex == DrawerIndex.Invite) {
+      } else if (drawerIndex == DrawerIndex.Planner) {
         setState(() {
           screenView = null;
         });
-      } else if (drawerIndex == DrawerIndex.Share) {
+      } else if (drawerIndex == DrawerIndex.Files) {
         setState(() {
           screenView = null;
         });
-        //do in your way......
+      } else if(drawerIndex == DrawerIndex.Timetable) {
+        setState(() {
+          screenView = null;
+        });
+      } else if(drawerIndex == DrawerIndex.Recordings) {
+        setState(() {
+          screenView = null;
+        });
       }
     }
   }
