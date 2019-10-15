@@ -211,9 +211,6 @@ class SignUpState extends State<SignUp>
                                   color: Colors.deepPurple,
                                   onPressed: () async {
                           if (formKey.currentState.validate()) {
-                            indicatorKey.currentState.setState(() {
-                              indicatorKey.currentState.opacity = 1;
-                            });
                             bool isSuccessful = await signUpWithEmail();
                             if (isSuccessful == true) {
                               Navigator.pop(context);
@@ -284,6 +281,7 @@ class SignUpState extends State<SignUp>
   Future<bool> signUpWithEmail() async {
     bool signUpSuccessful = false;
     try {
+      await changeLoadingVisible();
       MyApp.user = null;
       MyApp.user = (await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: eMail.text.trim() + '@st.futminna.edu.ng',
@@ -314,6 +312,7 @@ class SignUpState extends State<SignUp>
         //i would send a verification email here
         // and take the user to the login page
       } else {
+        await changeLoadingVisible();
         indicatorKey.currentState.setState(() {
           indicatorKey.currentState.opacity = 0;
         });

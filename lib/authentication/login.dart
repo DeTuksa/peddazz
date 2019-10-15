@@ -222,6 +222,7 @@ class LoginPage extends State<Login> {
       print(e.toString());
     } finally {
       if (MyApp.user == null) {
+        await _changeLoadingVisible();
         indicatorKey.currentState.setState(() {
           indicatorKey.currentState.opacity = 0;
         });

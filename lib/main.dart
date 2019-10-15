@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:peddazz/authentication/login.dart';
 import 'package:peddazz/authentication/signup.dart';
+import 'package:peddazz/chats/chats.dart';
 import 'package:peddazz/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 GlobalKey globalKey = new GlobalKey();
 
@@ -27,7 +29,8 @@ class MyApp extends StatelessWidget {
       routes: {
         "login": (context) => Login(),
         "sign_up": (context) => SignUp(),
-        "home": (context) => HomeScreen(),
+        "home": (context) => MyHomePage(),
+        "chats": (context) => ChatUsers(),
       },
     );
   }
@@ -62,7 +65,7 @@ class MyApp extends StatelessWidget {
                   ),
                 );
               }
-              return HomeScreen();
+              return MyHomePage();
             },
           );
         } else {
@@ -99,6 +102,89 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('PEDDAZZ'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: 80,
+                    width: 80,
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(60.0)),
+                        child: Image.asset('images/Dee.jpg'),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Center(
+                      child: Text(MyApp.user.email, style: TextStyle(fontSize: 16),),
+                    )
+                  )
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(FontAwesomeIcons.university),
+              title: Text('Overview'),
+              onTap: null,
+            ),
+            ListTile(
+              leading: Icon(FontAwesomeIcons.clipboardList),
+              title: Text('Planner'),
+              onTap: null,
+            ),
+            ListTile(
+              leading: Icon(FontAwesomeIcons.paperPlane),
+              title: Text('Chats'),
+              onTap: () {
+                Navigator.of(context).popAndPushNamed("chats");
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.trending_up),
+              title: Text('Feed'),
+              onTap: null,
+            ),
+            ListTile(
+              leading: Icon(Icons.folder_shared),
+              title: Text('My Files'),
+              onTap: null,
+            ),
+            ListTile(
+              leading: Icon(FontAwesomeIcons.book),
+              title: Text('Notes'),
+              onTap: null
+            ),
+            ListTile(
+              leading: Icon(Icons.mic),
+              title: Text('Recordings'),
+              onTap: null
+            ),
+            Divider(),
+            ListTile(
+              title: Text('Settings'),
+              trailing: Icon(Icons.settings),
+              onTap: null,
+            ),
+            ListTile(
+              title:Text('Sign Out'),
+              trailing: Icon(Icons.power_settings_new, color: Colors.red),
+              onTap: () {
+                  FirebaseAuth.instance.signOut();
+                },
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }

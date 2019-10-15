@@ -1,6 +1,7 @@
 import 'package:peddazz/home/drawer_controller.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:peddazz/home/home_drawer.dart';
+import 'package:peddazz/chats/chats.dart';
 
 class HomeScreen extends StatefulWidget
 {
@@ -55,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen>
         });
       } else if (drawerIndex == DrawerIndex.Chats) {
         setState(() {
-          screenView = null;
+          screenView = ChatUsers();
         });
       } else if (drawerIndex == DrawerIndex.Feed) {
         setState(() {
