@@ -77,24 +77,36 @@ class ChatUsersState extends State<ChatUsers>
               ),
             ),
             Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  child: TextField(
-                    onSubmitted: (value) => callBack(),
-                    controller: message,
-                    decoration: InputDecoration(
-                      hintText: 'Enter a message'
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                    child: TextField(
+                      onSubmitted: (value) => callBack(),
+                      controller: message,
+                      decoration: InputDecoration(
+                        hintText: 'Enter a message',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24)
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                FloatingActionButton(
-                  child: Icon(Icons.send),
-                  onPressed: () {
-                    callBack();
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 5, right: 5),
+                  child: FloatingActionButton(
+                    child: Icon(Icons.send),
+                    onPressed: () {
+                      callBack();
+                    },
+                  ),
                 )
               ],
             )

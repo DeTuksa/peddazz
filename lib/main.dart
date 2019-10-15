@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:peddazz/authentication/login.dart';
 import 'package:peddazz/authentication/signup.dart';
 import 'package:peddazz/chats/chats.dart';
+import 'package:peddazz/colors.dart';
 import 'package:peddazz/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -111,6 +112,9 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
+              decoration: BoxDecoration(
+                color: AppColor.accent
+              ),
               child: Column(
                 children: <Widget>[
                   Container(
@@ -126,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: Center(
-                      child: Text(MyApp.user.email, style: TextStyle(fontSize: 16),),
+                      child: Text(MyApp.user.email, style: TextStyle(fontSize: 17, color: Colors.white),),
                     )
                   )
                 ],
@@ -169,7 +173,9 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('Recordings'),
               onTap: null
             ),
-            Divider(),
+            Divider(
+              height: 33,
+            ),
             ListTile(
               title: Text('Settings'),
               trailing: Icon(Icons.settings),
