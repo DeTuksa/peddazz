@@ -2,6 +2,7 @@ import 'package:peddazz/home/drawer_controller.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:peddazz/home/home_drawer.dart';
 import 'package:peddazz/chats/chats.dart';
+import 'package:peddazz/feed/feed_page.dart';
 
 class HomeScreen extends StatefulWidget
 {
@@ -60,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen>
         });
       } else if (drawerIndex == DrawerIndex.Feed) {
         setState(() {
-          screenView = null;
+          screenView = FeedPage();
         });
       } else if (drawerIndex == DrawerIndex.Planner) {
         setState(() {

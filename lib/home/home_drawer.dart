@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peddazz/colors.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class HomeDrawer extends StatefulWidget {
   final AnimationController iconAnimationController;
@@ -15,6 +17,10 @@ class HomeDrawer extends StatefulWidget {
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
+
+  File profile;
+  File image;
+
   List<DrawerList> drawerList;
   @override
   void initState() {
@@ -107,7 +113,25 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             child: ClipRRect(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(60.0)),
-                              child: Image.asset("images/Dee.jpg"),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  image = await ImagePicker.pickImage(source: ImageSource.camera);
+                                  profile = image;
+                                  print(image.path);
+                                  if(profile == null)
+                                  {
+                                    print("no image");
+                                  }
+                                  else
+                                  {
+                                    print("Image selected!");
+                                  }
+                                  this.setState((){
+
+                                  });
+                                },
+                                child: profile == null ? Icon(Icons.photo_camera) : new Image.file(image),
+                              ),
                             ),
                           ),
                         ),

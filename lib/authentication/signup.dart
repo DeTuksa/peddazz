@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 import 'loading.dart';
 import 'package:peddazz/main.dart';
+import 'dart:io';
 
 GlobalKey<CustomCircularProgressIndicatorState> indicatorKey = new GlobalKey();
 
@@ -23,6 +25,9 @@ class SignUpState extends State<SignUp>
   final TextEditingController passWord = new TextEditingController();
   bool loadingVisible = false;
   bool autoValidate = false;
+  File image;
+  File profile;
+  String uploadImageURL;
 
   @override
   Widget build(BuildContext context)
@@ -62,6 +67,20 @@ class SignUpState extends State<SignUp>
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
+                                  Container(
+                                    child: Center(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.all(Radius.circular(60.0)),
+                                        child: GestureDetector(
+                                          onTap: () async
+                                            {
+                                              image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                                              profile = image;
+                                            }
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   Container(
                                     width: MediaQuery.of(context).size.width*0.28,
                                     child: TextFormField(

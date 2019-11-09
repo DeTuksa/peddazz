@@ -6,7 +6,10 @@ import 'package:peddazz/colors.dart';
 import 'package:peddazz/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 GlobalKey globalKey = new GlobalKey();
 
@@ -66,7 +69,7 @@ class MyApp extends StatelessWidget {
                   ),
                 );
               }
-              return MyHomePage();
+              return HomeScreen();
             },
           );
         } else {
@@ -101,6 +104,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  File profile;
+  File image;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,7 +129,25 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Center(
                       child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(60.0)),
-                        child: Image.asset('images/Dee.jpg'),
+                        child: GestureDetector(
+                          onTap: () async {
+                            image = await ImagePicker.pickImage(source: ImageSource.camera);
+                            profile = image;
+                            print(image.path);
+                            if(profile == null)
+                            {
+                              print("no image");
+                            }
+                            else
+                            {
+                              print("Image selected!");
+                            }
+                            this.setState((){
+
+                            });
+                          },
+                            child: profile == null ? Icon(Icons.photo_camera) : new Image.file(image),
+                        ),
                       ),
                     ),
                   ),
