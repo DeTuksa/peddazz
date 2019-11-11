@@ -21,7 +21,8 @@ class _PenThoughtsState extends State<PenThoughts> {
     if(message.text.length > 0) {
       await firestore.collection('Feed').add({
         'text': message.text,
-        'from': MyApp.user.email
+        'from': MyApp.user.email,
+        'timestamp': Timestamp.now(),
       });
 
       message.clear();
@@ -79,7 +80,7 @@ class _PenThoughtsState extends State<PenThoughts> {
             child: TextFormField(
               keyboardType: TextInputType.multiline,
               maxLength: 140,
-              maxLines: 10,
+              maxLines: null,
               controller: message,
               decoration: InputDecoration(
                 labelText: 'Put your thoughts out there...',
@@ -97,8 +98,9 @@ class Tweet extends StatelessWidget {
   final String username;
   final String handle;
   final String text;
+  final Timestamp timestamp;
 
-  const Tweet({Key key, this.handle, this.username, this.text}) : super(key: key);
+  const Tweet({Key key, this.handle, this.username, this.text, this.timestamp}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

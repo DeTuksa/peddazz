@@ -31,7 +31,8 @@ class ChatUsersState extends State<ChatUsers>
     if(message.text.length > 0) {
       await firestore.collection('messages').add({
         'text': message.text,
-        'from': MyApp.user.email
+        'from': MyApp.user.email,
+        'timestamp': Timestamp.now()
       });
 
       message.clear();
@@ -53,7 +54,7 @@ class ChatUsersState extends State<ChatUsers>
           children: <Widget>[
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: firestore.collection('messages').snapshots(),
+                stream: firestore.collection('messages').orderBy('timestamp', descending: true).snapshots(),
                 builder: (context, snapshot) {
                   if(!snapshot.hasData)return Center(
                       child: CustomCircularProgressIndicator()
@@ -87,8 +88,11 @@ class ChatUsersState extends State<ChatUsers>
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
-                    child: TextField(
-                      onSubmitted: (value) => callBack(),
+                    child: TextFormField(
+                      keyboardType: TextInputType.multiline,
+                      maxLength: null,
+                      maxLines: null,
+                      onFieldSubmitted: (value) => callBack(),
                       controller: message,
                       decoration: InputDecoration(
                         hintText: 'Enter a message',

@@ -1,12 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Message extends StatelessWidget {
   final String from;
   final String text;
+  final Timestamp timestamp;
 
   final bool person;
 
-  const Message({Key key, this.from, this.text, this.person}) : super(key: key);
+  const Message({Key key, this.from, this.text, this.person, this.timestamp}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

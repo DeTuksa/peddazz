@@ -124,7 +124,7 @@ class _FeedPageState extends State<FeedPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             IconButton(
-                icon: Icon(FontAwesomeIcons.igloo),
+                icon: Icon(FontAwesomeIcons.school),
                 onPressed: null
             ),
             IconButton(
@@ -154,10 +154,10 @@ class _FeedPageState extends State<FeedPage> {
           children: <Widget>[
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: firestore.collection('Feed').snapshots(),
+                stream: firestore.collection('Feed').orderBy('timestamp', descending: true).snapshots(),
                 builder: (context, snapshot) {
                   if(!snapshot.hasData)return Center(
-                      //child: CustomCircularProgressIndicator()
+
                   );
 
                   List<DocumentSnapshot> docs = snapshot.data.documents;
@@ -165,6 +165,7 @@ class _FeedPageState extends State<FeedPage> {
                   List<Widget> messages = docs.map((doc) => Tweet(
                     handle: doc.data['from'],
                     text: doc.data['text'],
+                    timestamp: doc.data['timestamp'],
                     //person: MyApp.user.email == doc.data['from'],
                   )).toList();
 
