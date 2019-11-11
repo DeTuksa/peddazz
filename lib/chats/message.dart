@@ -12,11 +12,15 @@ class Message extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        crossAxisAlignment: person ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment:
+            person ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(left: 5, right: 5),
-            child: Text(from, style: TextStyle(color: Colors.grey),),
+            child: Text(
+              from,
+              style: TextStyle(color: Colors.grey),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
@@ -35,3 +39,4 @@ class Message extends StatelessWidget {
     );
   }
 }
+

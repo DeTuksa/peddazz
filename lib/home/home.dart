@@ -16,13 +16,13 @@ class _HomeScreenState extends State<HomeScreen>
   DrawerIndex drawerIndex;
   AnimationController sliderAnimationController;
 
-  @override
-  void initState()
-  {
-    drawerIndex = DrawerIndex.Overview;
-    screenView = null;
-    super.initState();
-  }
+//  @override
+//  void initState()
+//  {
+//    drawerIndex = DrawerIndex.Overview;
+//    screenView = null;
+//    super.initState();
+//  }
 
   @override
   Widget build(BuildContext context)

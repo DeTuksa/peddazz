@@ -3,6 +3,8 @@ import 'package:peddazz/authentication/login.dart';
 import 'package:peddazz/authentication/signup.dart';
 import 'package:peddazz/chats/chats.dart';
 import 'package:peddazz/colors.dart';
+import 'package:peddazz/feed/feed_page.dart';
+import 'package:peddazz/feed/writeup_page.dart';
 import 'package:peddazz/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
         "sign_up": (context) => SignUp(),
         "home": (context) => MyHomePage(),
         "chats": (context) => ChatUsers(),
+        "feed": (context) => FeedPage(),
+        "write": (context) => PenThoughts(),
       },
     );
   }
@@ -69,7 +73,7 @@ class MyApp extends StatelessWidget {
                   ),
                 );
               }
-              return HomeScreen();
+              return MyHomePage();
             },
           );
         } else {
@@ -180,7 +184,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               leading: Icon(Icons.trending_up),
               title: Text('Feed'),
-              onTap: null,
+              onTap: ()
+              {
+                Navigator.of(context).popAndPushNamed("feed");
+              },
             ),
             ListTile(
               leading: Icon(Icons.folder_shared),
