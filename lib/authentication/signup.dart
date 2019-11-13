@@ -68,20 +68,6 @@ class SignUpState extends State<SignUp>
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
                                   Container(
-                                    child: Center(
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.all(Radius.circular(60.0)),
-                                        child: GestureDetector(
-                                          onTap: () async
-                                            {
-                                              image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                                              profile = image;
-                                            }
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
                                     width: MediaQuery.of(context).size.width*0.28,
                                     child: TextFormField(
                                       validator: (value) {
@@ -176,7 +162,7 @@ class SignUpState extends State<SignUp>
                                   ),
                                   Text("@st.futminna.edu.ng",
                                   style: TextStyle(
-                                    fontSize: 18.0,
+                                    fontSize: 17.0,
                                     color: Colors.grey
                                   ),
                                   )

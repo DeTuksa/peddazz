@@ -54,7 +54,7 @@ class ChatUsersState extends State<ChatUsers>
           children: <Widget>[
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: firestore.collection('messages').orderBy('timestamp', descending: true).snapshots(),
+                stream: firestore.collection('messages').orderBy('timestamp', descending: false).snapshots(),
                 builder: (context, snapshot) {
                   if(!snapshot.hasData)return Center(
                       child: CustomCircularProgressIndicator()
