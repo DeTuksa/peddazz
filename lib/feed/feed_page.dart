@@ -17,95 +17,6 @@ class _FeedPageState extends State<FeedPage> {
   TextEditingController message = TextEditingController();
   ScrollController scroll = ScrollController();
 
-  Widget thought = Column(
-    mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Flexible(
-          fit: FlexFit.loose,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(bottom: 3),
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 5),
-                    child: Text(
-                      'Tuksa',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 5),
-                  child: Text(
-                    '@dt_emmy',
-                    style: TextStyle(
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ),
-                Text(
-                  '5h ago',
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        Flexible(
-          fit: FlexFit.loose,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            child: Text("This is the first tweet on this forum. I'm still contemplating on the name to give this platform. Any ideas?"),
-          ),
-        ),
-        
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            IconButton(
-                icon: Icon(Icons.reply),
-                onPressed: null
-            ),
-            
-            IconButton(
-                icon: Icon(Icons.repeat),
-                onPressed: null
-            ),
-            
-            IconButton(
-                icon: Icon(Icons.favorite_border),
-                onPressed: null
-            ),
-            
-          ],
-        ),
-
-        Divider()
-      ],
-  );
-
-  Column buildButtonColumn(Color color, IconData icon)
-  {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(icon, color: color,)
-      ],
-    );
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,18 +73,13 @@ class _FeedPageState extends State<FeedPage> {
 
                   List<DocumentSnapshot> docs = snapshot.data.documents;
 
-                  List<Widget> messages = docs.map((doc) => Tweet(
-                    handle: doc.data['from'],
-                    text: doc.data['text'],
-                    timestamp: doc.data['timestamp'],
-                    //person: MyApp.user.email == doc.data['from'],
-                  )).toList();
+                  List<Widget> messages = docs.map((doc) => Feed(
+                    snapshot: doc,
+                  ) ).toList();
 
                   return ListView(
                     controller: scroll,
-                    children: <Widget>[
-                      ... messages,
-                    ],
+                    children: messages,
                   );
                 },
               ),
@@ -181,6 +87,90 @@ class _FeedPageState extends State<FeedPage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+
+class Feed extends StatelessWidget{
+  final DocumentSnapshot snapshot;
+  Feed({this.snapshot});
+  @override
+  Widget build(BuildContext context){
+    Timestamp timestamp = snapshot["timestamp"];
+    Duration duration= Timestamp.now().toDate().difference(timestamp.toDate());
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                  snapshot["text"],
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              Row(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text(
+                          snapshot["from"],
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        duration.inDays>5? "${timestamp.toDate().day}/${timestamp.toDate().month}/${timestamp.toDate().year}" :
+                        duration.inDays>=1?"${duration.inDays} ${duration.inDays<=1?"day":"days"} ago":
+                        duration.inHours>=1?"${duration.inHours}  ${duration.inHours<=1?"hour":"hours"} ago":
+                        duration.inMinutes>=1?"${duration.inMinutes} ${duration.inMinutes<=1?"minute":"minutes"} ago":
+                        "${duration.inSeconds} ${duration.inSeconds<=1?"second":"seconds"} ago",
+                        style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Icon(
+                          FontAwesomeIcons.share,
+                          size: 15,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Icon(
+                            Icons.more_vert,
+                          size: 15,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+        Divider()
+      ],
     );
   }
 }
