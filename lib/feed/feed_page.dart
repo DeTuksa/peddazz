@@ -113,6 +113,7 @@ class Feed extends StatelessWidget{
                   snapshot["text"],
                 style: TextStyle(
                   fontSize: 20,
+                  color: Colors.grey
                 ),
               ),
               Row(
@@ -128,7 +129,7 @@ class Feed extends StatelessWidget{
                           snapshot["from"],
                           style: TextStyle(
                             fontSize: 10,
-                            color: Colors.grey,
+                            color: Colors.black,
                           ),
                         ),
                       ),

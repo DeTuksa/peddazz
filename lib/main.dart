@@ -13,6 +13,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import 'package:peddazz/settings/settings.dart';
+
 GlobalKey globalKey = new GlobalKey();
 
 
@@ -39,6 +41,7 @@ class MyApp extends StatelessWidget {
         "chats": (context) => ChatUsers(),
         "feed": (context) => FeedPage(),
         "write": (context) => PenThoughts(),
+        "settings": (context) => Settings()
       },
     );
   }
@@ -210,7 +213,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text('Settings'),
               trailing: Icon(Icons.settings),
-              onTap: null,
+              onTap: ()
+              {
+                Navigator.of(context).popAndPushNamed("settings");
+              },
             ),
             ListTile(
               title:Text('Sign Out'),

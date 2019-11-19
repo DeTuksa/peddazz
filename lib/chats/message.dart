@@ -27,12 +27,17 @@ class Message extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
             child: Material(
-              color: person ? Colors.teal : Colors.blue,
+              color: person ? Colors.white70 : Colors.blueGrey,
               borderRadius: BorderRadius.circular(10.0),
               elevation: 6.0,
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                child: Text(text),
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: person ? Colors.black : Colors.white
+                  ),
+                  ),
               ),
             ),
           )
