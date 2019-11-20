@@ -133,6 +133,7 @@ class LoginBodyState extends State<LoginBody> {
                             child: RaisedButton(
                               color: Colors.deepPurple,
                               onPressed: () async {
+                                FocusScope.of(context).requestFocus(new FocusNode());
                                 bool activeConnection = false;
                                 try {
                                   final result = await InternetAddress.lookup(

@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         "chats": (context) => ChatUsers(),
         "feed": (context) => FeedPage(),
         "write": (context) => PenThoughts(),
-        "settings": (context) => Settings()
+        "settings": (context) => Settings(),
       },
     );
   }
@@ -215,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
               trailing: Icon(Icons.settings),
               onTap: ()
               {
-                Navigator.of(context).popAndPushNamed("settings");
+                Navigator.popAndPushNamed(context, "settings");
               },
             ),
             ListTile(

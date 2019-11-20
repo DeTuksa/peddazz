@@ -33,8 +33,8 @@ class _SettingsState extends State<Settings> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.height*0.1,
-                  height: MediaQuery.of(context).size.height*0.1,
+                  width: MediaQuery.of(context).size.height*0.075,
+                  height: MediaQuery.of(context).size.height*0.075,
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(60)),
                     child: Image.asset("images/index.png"),
@@ -52,7 +52,7 @@ class _SettingsState extends State<Settings> {
                       Text(
                         "Username",
                         style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height*0.0275
+                          fontSize: MediaQuery.of(context).size.height*0.02
                         ),
                         ),
 
@@ -97,7 +97,7 @@ class _SettingsState extends State<Settings> {
                       child: Text(
                         "Notifications",
                         style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height*0.025
+                          fontSize: MediaQuery.of(context).size.height*0.02
                         ),
                       ),
                     )
@@ -130,7 +130,7 @@ class _SettingsState extends State<Settings> {
                       child: Text(
                         "Help",
                         style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height*0.025
+                          fontSize: MediaQuery.of(context).size.height*0.02
                         ),
                       ),
                     )
@@ -163,7 +163,7 @@ class _SettingsState extends State<Settings> {
                       child: Text(
                         "Invite a friend",
                         style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height*0.025
+                          fontSize: MediaQuery.of(context).size.height*0.02
                         ),
                       ),
                     )
@@ -195,7 +195,7 @@ class _SettingsState extends State<Settings> {
                       child: Text(
                         "About Peddazz",
                         style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height*0.025
+                          fontSize: MediaQuery.of(context).size.height*0.02
                         ),
                       ),
                     )
