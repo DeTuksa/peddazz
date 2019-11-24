@@ -215,6 +215,7 @@ class SignUpState extends State<SignUp>
                                 child: RaisedButton(
                                   color: Colors.deepPurple,
                                   onPressed: () async {
+                                    FocusScope.of(context).requestFocus(new FocusNode());
                           if (formKey.currentState.validate()) {
                             bool isSuccessful = await signUpWithEmail();
                             if (isSuccessful == true) {
