@@ -17,6 +17,7 @@ import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:peddazz/settings/settings.dart';
+import 'chats/users.dart';
 
 GlobalKey globalKey = new GlobalKey();
 
@@ -41,7 +42,8 @@ class MyApp extends StatelessWidget {
         "login": (context) => Login(),
         "sign_up": (context) => SignUp(),
         "home": (context) => MyHomePage(),
-        "chats": (context) => ChatUsers(),
+        "chatPage": (context) => ChatUsers(),
+        "chats": (context) => UsersDisplay(),
         "feed": (context) => FeedPage(),
         "write": (context) => PenThoughts(),
         "settings": (context) => Settings(),
