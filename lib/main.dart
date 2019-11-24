@@ -5,13 +5,16 @@ import 'package:peddazz/chats/chats.dart';
 import 'package:peddazz/colors.dart';
 import 'package:peddazz/feed/feed_page.dart';
 import 'package:peddazz/feed/writeup_page.dart';
-import 'package:peddazz/home/home.dart';
+//import 'package:peddazz/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:peddazz/recording/audio_recording.dart';
+import 'package:peddazz/storage.dart';
 import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:peddazz/settings/settings.dart';
 
@@ -42,6 +45,8 @@ class MyApp extends StatelessWidget {
         "feed": (context) => FeedPage(),
         "write": (context) => PenThoughts(),
         "settings": (context) => Settings(),
+        "audio_recording": (context) => AudioRecording(),
+        "files": (context) => Storage()
       },
     );
   }
@@ -110,6 +115,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  @override
+  void initState()
+  {
+    super.initState();
+    requestAudioPermission();
+    requestStoragePermission();
+  }
+
+  requestAudioPermission() async
+  {
+
+    Map<PermissionGroup, PermissionStatus> microphone = await PermissionHandler().requestPermissions([PermissionGroup.microphone]);
+    return microphone;
+  }
+
+  requestStoragePermission() async
+  {
+    Map<PermissionGroup, PermissionStatus> storage = await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+    return storage;
+  }
 
   File profile;
   File image;
@@ -195,7 +221,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               leading: Icon(Icons.folder_shared),
               title: Text('My Files'),
-              onTap: null,
+              onTap: ()
+              {
+                Navigator.of(context).popAndPushNamed("files");
+              },
             ),
             ListTile(
               leading: Icon(FontAwesomeIcons.book),
@@ -205,7 +234,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               leading: Icon(Icons.mic),
               title: Text('Recordings'),
-              onTap: null
+              onTap: ()
+                {
+                  Navigator.of(context).popAndPushNamed("audio_recording");
+                }
             ),
             Divider(
               height: 33,
