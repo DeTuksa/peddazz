@@ -23,8 +23,7 @@ class UsersDisplayState extends State<UsersDisplay> {
               itemBuilder: (context, count) {
                 String email = usersSnapshot.data.documents[count]["email"]
                         .toString()
-                        .trim() +
-                    "@st.futminna.edu.ng";
+                        .trim();
                 if (email == MyApp.user.email) {
                   return Container();
                 }

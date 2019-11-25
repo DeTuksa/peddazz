@@ -90,11 +90,10 @@ class ChatUsersState extends State<ChatUsers> {
             .document(receiverID)
             .get()
             .then((receiverSnapshot) {
-          receiversEmail = receiverSnapshot["email"].toString().trim() +
-              "@st.futminna.edu.ng";
+          receiversEmail = receiverSnapshot["email"].toString().trim();
         });
 
-        firestore
+        receiverSub=firestore
             .collection("user")
             .document(receiverID)
             .collection("messages")
@@ -106,7 +105,7 @@ class ChatUsersState extends State<ChatUsers> {
           });
         });
 
-        firestore
+        senderSub=firestore
             .collection("user")
             .document(MyApp.user.uid)
             .collection("messages")
