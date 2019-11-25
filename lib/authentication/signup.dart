@@ -303,7 +303,7 @@ class SignUpState extends State<SignUp>
             firstName: firstName.text,
             middleName: middleName.text,
             lastName: lastName.text,
-            email: eMail.text);
+            email: eMail.text.trim()+"@st.futminna.edu.ng");
 
         try {
           Firestore.instance.runTransaction((Transaction transaction) async {

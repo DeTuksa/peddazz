@@ -11,7 +11,7 @@ class _StorageState extends State<Storage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Documents"),
+        title: Text("My Files"),
       ),
       body: SafeArea(
         top: false,
