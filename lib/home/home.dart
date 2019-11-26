@@ -38,8 +38,8 @@ class _HomeScreenState extends State<HomeScreen>
             animeController: (AnimationController animationController) {
               sliderAnimationController = animationController;
             },
-            onDrawerCall: (DrawerIndex drawerIndexdata) {
-              changeIndex(drawerIndexdata);
+            onDrawerCall: (DrawerIndex drawerIndexData) {
+              changeIndex(drawerIndexData);
             },
             screenView: screenView,
           ),
@@ -48,9 +48,9 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  void changeIndex(DrawerIndex drawerIndexdata) {
-    if (drawerIndex != drawerIndexdata) {
-      drawerIndex = drawerIndexdata;
+  void changeIndex(DrawerIndex drawerIndexData) {
+    if (drawerIndex != drawerIndexData) {
+      drawerIndex = drawerIndexData;
       if (drawerIndex == DrawerIndex.Overview) {
         setState(() {
           screenView = null;

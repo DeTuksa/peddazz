@@ -24,11 +24,11 @@ class _HomeDrawerState extends State<HomeDrawer> {
   List<DrawerList> drawerList;
   @override
   void initState() {
-    setdDrawerListArray();
+    setDrawerListArray();
     super.initState();
   }
 
-  void setdDrawerListArray() {
+  void setDrawerListArray() {
     drawerList = [
       DrawerList(
         index: DrawerIndex.Overview,
@@ -223,7 +223,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
         splashColor: Colors.grey.withOpacity(0.1),
         highlightColor: Colors.transparent,
         onTap: () {
-          navigationtoScreen(listData.index);
+          navigationToScreen(listData.index);
         },
         child: Stack(
           children: <Widget>[
@@ -318,7 +318,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
     );
   }
 
-  void navigationtoScreen(DrawerIndex indexScreen) async {
+  void navigationToScreen(DrawerIndex indexScreen) async {
     widget.callBackIndex(indexScreen);
   }
 }
