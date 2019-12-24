@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:peddazz/notes/notescreen.dart';
 import 'package:peddazz/recording/audio_recording.dart';
 import 'package:peddazz/storage.dart';
 import 'dart:io';
@@ -48,7 +49,8 @@ class MyApp extends StatelessWidget {
         "write": (context) => PenThoughts(),
         "settings": (context) => Settings(),
         "audio_recording": (context) => AudioRecording(),
-        "files": (context) => Storage()
+        "files": (context) => Storage(),
+        "notes":(context) => NotesScreen()
       },
     );
   }
@@ -231,7 +233,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               leading: Icon(FontAwesomeIcons.book),
               title: Text('Notes'),
-              onTap: null
+              onTap: () {
+                Navigator.of(context).popAndPushNamed("notes");
+              }
             ),
             ListTile(
               leading: Icon(Icons.mic),

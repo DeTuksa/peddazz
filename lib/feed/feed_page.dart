@@ -109,15 +109,8 @@ class Feed extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                  snapshot["text"],
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey
-                ),
-              ),
               Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Column(
                     mainAxisSize: MainAxisSize.min,
@@ -128,8 +121,8 @@ class Feed extends StatelessWidget{
                         child: Text(
                           snapshot["from"],
                           style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.black,
+                            fontSize: MediaQuery.of(context).size.height*0.0175,
+                            color: Colors.grey,
                           ),
                         ),
                       ),
@@ -159,13 +152,20 @@ class Feed extends StatelessWidget{
                       Padding(
                         padding: EdgeInsets.all(10),
                         child: Icon(
-                            Icons.more_vert,
+                          Icons.more_vert,
                           size: 15,
                         ),
                       )
                     ],
                   )
                 ],
+              ),
+              Text(
+                  snapshot["text"],
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black
+                ),
               )
             ],
           ),

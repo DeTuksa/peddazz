@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:peddazz/main.dart';
+//import 'package:peddazz/main.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -73,136 +73,29 @@ class _SettingsState extends State<Settings> {
             color: Colors.grey,
           ),
 
-          Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height*0.02,
-              left: MediaQuery.of(context).size.height*0.02,
-              bottom: MediaQuery.of(context).size.height*0.02
-            ),
-
-            child: GestureDetector(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Icon(
-                    Icons.notifications,
-                    color: Colors.blueGrey,
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height*0.002,
-                        left: MediaQuery.of(context).size.height*0.015
-                      ),
-                      child: Text(
-                        "Notifications",
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height*0.02
-                        ),
-                      ),
-                    )
-                ],
-              ),
-            ),
+          ListTile(
+            leading: Icon(Icons.notifications),
+            title: Text("Notifications"),
+            onTap: null,
           ),
 
-          Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height*0.02,
-              left: MediaQuery.of(context).size.height*0.02,
-              bottom: MediaQuery.of(context).size.height*0.02
-            ),
-
-            child: GestureDetector(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Icon(
-                    Icons.help_outline,
-                    color: Colors.blueGrey,
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height*0.002,
-                        left: MediaQuery.of(context).size.height*0.015
-                      ),
-                      child: Text(
-                        "Help",
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height*0.02
-                        ),
-                      ),
-                    )
-                ],
-              ),
-            ),
+          ListTile(
+            leading: Icon(Icons.help_outline),
+            title: Text("Help"),
+            onTap: null,
           ),
 
-          Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height*0.02,
-              left: MediaQuery.of(context).size.height*0.02,
-              bottom: MediaQuery.of(context).size.height*0.02
-            ),
-
-            child: GestureDetector(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Icon(
-                    Icons.people,
-                    color: Colors.blueGrey,
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height*0.002,
-                        left: MediaQuery.of(context).size.height*0.015
-                      ),
-                      child: Text(
-                        "Invite a friend",
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height*0.02
-                        ),
-                      ),
-                    )
-                ],
-              ),
-            ),
+          ListTile(
+            leading: Icon(Icons.people),
+            title: Text("Invite a friend"),
+            onTap: null,
           ),
 
-          Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height*0.02,
-              left: MediaQuery.of(context).size.height*0.02
-            ),
-
-            child: GestureDetector(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Icon(
-                    Icons.info_outline,
-                    color: Colors.blueGrey,
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height*0.002,
-                        left: MediaQuery.of(context).size.height*0.015
-                      ),
-                      child: Text(
-                        "About Peddazz",
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height*0.02
-                        ),
-                      ),
-                    )
-                ],
-              ),
-            ),
-          )
+          ListTile(
+            leading: Icon(Icons.info_outline),
+            title: Text("About Peddazz"),
+            onTap: null,
+          ),
         ],
       ),
     );

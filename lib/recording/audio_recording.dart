@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:audio_recorder/audio_recorder.dart';
 import 'package:path/path.dart' as q;
 import 'package:path_provider/path_provider.dart';
+import 'package:peddazz/recording/audio_file_page.dart';
 import 'dart:io';
 import 'save_recording.dart';
 
@@ -21,7 +22,7 @@ class _AudioRecordingState extends State<AudioRecording> {
   bool _isRecording = false;
   bool save = false;
 
-  String file = "TempRecord";
+  String file = "Record";
   File defaultFile;
 
   startRecording() async
@@ -42,7 +43,7 @@ class _AudioRecordingState extends State<AudioRecording> {
       if(await AudioRecorder.hasPermissions)
         {
           await AudioRecorder.start(
-            path: newFilePath, audioOutputFormat: AudioOutputFormat.AAC
+            path: newFilePath, audioOutputFormat: AudioOutputFormat.WAV
           );
         } else {
         globalKey.currentState.showSnackBar(new SnackBar(content: new Text("Error! Audio recorder lacks permissions")));
@@ -62,7 +63,7 @@ class _AudioRecordingState extends State<AudioRecording> {
 
   stopRecording() async
   {
-    var recording = await AudioRecorder.stop();
+    await AudioRecorder.stop();
     bool isRecording = await AudioRecorder.isRecording;
 
     Directory directory = await getApplicationDocumentsDirectory();
@@ -70,8 +71,9 @@ class _AudioRecordingState extends State<AudioRecording> {
     setState(() {
       _isRecording = isRecording;
       save = true;
-      defaultFile = File(q.join(directory.path, this.file+'.m4a'));
+      defaultFile = File(q.join(directory.path, this.file+'.wav'));
     });
+    saveDialog();
   }
 
   deleteCurrentFile() async
@@ -161,124 +163,129 @@ class _AudioRecordingState extends State<AudioRecording> {
                 "Recording",
               ),
             ),
-            body: Builder(
-              builder: (BuildContext context) {
-                return new Card(
-                  child: new Center(
-                    child: new Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Spacer(flex: 1,),
-
-                        Padding(
-                            padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height*0.05
-                            )
-                        ),
-
-                        Container(
-                          width: MediaQuery.of(context).size.height*0.12,
-                          height: MediaQuery.of(context).size.height*0.12,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 15,
-                            valueColor: _isRecording ? AlwaysStoppedAnimation<Color>(Colors.deepPurpleAccent) : AlwaysStoppedAnimation<Color>(Colors.blueGrey[50]),
-                            value: _isRecording ? null : 100,
-                          ),
-                        ),
-
-                        Spacer(),
-
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.height*0.05
-                          ),
-                        ),
-
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                new FloatingActionButton(
-                                  child: save ? new Icon(Icons.cancel) : null,
-                                  disabledElevation: 0.0,
-                                  backgroundColor: save ? Colors.deepPurpleAccent : Colors.transparent,
-                                  onPressed: save ? (() => showDialog(
-                                      context: context,
-                                      builder: (context) => deleteFileDialog()
-                                  )) : null,
-                                  mini: true,
-                                  heroTag: null,
-                                ),
-
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 8,
-                                  ),
-                                  child: save ? new Text(
-                                    'Delete',
-                                    textScaleFactor: 1.2,
-                                  ) : Container(),
-                                )
-                              ],
-                            ),
-
-                            Column(
-                              children: <Widget>[
-                                new FloatingActionButton(
-                                  child: _isRecording ? new Icon(Icons.stop, size: MediaQuery.of(context).size.height*0.04,) : new Icon(Icons.mic,  size: MediaQuery.of(context).size.height*0.05,),
-                                  onPressed: _isRecording ? stopRecording : startRecording,
-                                  heroTag: null,
-                                  disabledElevation: 0.0,
-                                ),
-
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 8,
-                                  ),
-                                  child: _isRecording ? new Text(
-                                    'Stop',
-                                    textScaleFactor: 1.5,
-                                  ) : new Text(
-                                    'Record',
-                                    textScaleFactor: 1.5,
-                                  ),
-                                )
-                              ],
-                            ),
-
-                            Column(
-                              children: <Widget>[
-                                new FloatingActionButton(
-                                  child: save ? new Icon(Icons.check_circle) : null,
-                                  backgroundColor: save ? Colors.deepPurpleAccent : Colors.transparent,
-                                  onPressed: save ? saveDialog : null,
-                                  mini: true,
-                                  heroTag: null,
-                                  disabledElevation: 0.0,
-                                ),
-
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 8,
-                                  ),
-                                  child: save ? new Text(
-                                    'Save',
-                                    textScaleFactor: 1.2,
-                                  ) : Container(),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-
-                        Spacer()
-                      ],
-                    ),
-                  ),
-                );
-              }
+//            body: Builder(
+//              builder: (BuildContext context) {
+//                return new Card(
+//                  child: new Center(
+//                    child: new Column(
+//                      mainAxisAlignment: MainAxisAlignment.center,
+//                      children: <Widget>[
+//                        Spacer(flex: 1,),
+//
+//                        Padding(
+//                            padding: EdgeInsets.only(
+//                                top: MediaQuery.of(context).size.height*0.05
+//                            )
+//                        ),
+//
+//                        Container(
+//                          width: MediaQuery.of(context).size.height*0.15,
+//                          height: MediaQuery.of(context).size.height*0.15,
+//                          child: CircularProgressIndicator(
+//                            strokeWidth: 15,
+//                            valueColor: _isRecording ? AlwaysStoppedAnimation<Color>(Colors.deepPurpleAccent) : AlwaysStoppedAnimation<Color>(Colors.blueGrey[50]),
+//                            value: _isRecording ? null : 100,
+//                          ),
+//                        ),
+//
+//                        Spacer(),
+//
+//                        Padding(
+//                          padding: EdgeInsets.only(
+//                              top: MediaQuery.of(context).size.height*0.05
+//                          ),
+//                        ),
+//
+//                        Row(
+//                          mainAxisSize: MainAxisSize.max,
+//                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                          children: <Widget>[
+//                            Column(
+//                              children: <Widget>[
+//                                new FloatingActionButton(
+//                                  child: save ? new Icon(Icons.cancel) : null,
+//                                  disabledElevation: 0.0,
+//                                  backgroundColor: save ? Colors.deepPurpleAccent : Colors.transparent,
+//                                  onPressed: save ? (() => showDialog(
+//                                      context: context,
+//                                      builder: (context) => deleteFileDialog()
+//                                  )) : null,
+//                                  mini: true,
+//                                  heroTag: null,
+//                                ),
+//
+//                                Padding(
+//                                  padding: EdgeInsets.only(
+//                                    top: 8,
+//                                  ),
+//                                  child: save ? new Text(
+//                                    'Delete',
+//                                    textScaleFactor: 1.2,
+//                                  ) : Container(),
+//                                )
+//                              ],
+//                            ),
+//
+////                            Column(
+////                              children: <Widget>[
+////                                new FloatingActionButton(
+////                                  child: _isRecording ? new Icon(Icons.stop, size: MediaQuery.of(context).size.height*0.04,) : new Icon(Icons.mic,  size: MediaQuery.of(context).size.height*0.05,),
+////                                  onPressed: _isRecording ? stopRecording : startRecording,
+////                                  heroTag: null,
+////                                  disabledElevation: 0.0,
+////                                ),
+////
+////                                Padding(
+////                                  padding: EdgeInsets.only(
+////                                    top: 8,
+////                                  ),
+////                                  child: _isRecording ? new Text(
+////                                    'Stop',
+////                                    textScaleFactor: 1.5,
+////                                  ) : new Text(
+////                                    'Record',
+////                                    textScaleFactor: 1.5,
+////                                  ),
+////                                )
+////                              ],
+////                            ),
+////
+////                            Column(
+////                              children: <Widget>[
+////                                new FloatingActionButton(
+////                                  child: save ? new Icon(Icons.check_circle) : null,
+////                                  backgroundColor: save ? Colors.deepPurpleAccent : Colors.transparent,
+////                                  onPressed: save ? saveDialog : null,
+////                                  mini: true,
+////                                  heroTag: null,
+////                                  disabledElevation: 0.0,
+////                                ),
+////
+////                                Padding(
+////                                  padding: EdgeInsets.only(
+////                                    top: 8,
+////                                  ),
+////                                  child: save ? new Text(
+////                                    'Save',
+////                                    textScaleFactor: 1.2,
+////                                  ) : Container(),
+////                                )
+////                              ],
+////                            )
+//                          ],
+//                        ),
+//
+//                        Spacer()
+//                      ],
+//                    ),
+//                  ),
+//                );
+//              }
+//            ),
+          body: FilePage(),
+            floatingActionButton: FloatingActionButton(
+                onPressed: _isRecording ? stopRecording : startRecording,
+              child: _isRecording ? Icon(Icons.stop) : Icon(Icons.mic),
             ),
           );
         }

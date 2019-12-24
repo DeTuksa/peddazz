@@ -17,13 +17,13 @@ class Message extends StatelessWidget {
         crossAxisAlignment:
             person ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            child: Text(
-              from,
-              style: TextStyle(color: Colors.grey),
-            ),
-          ),
+//          Padding(
+//            padding: const EdgeInsets.only(left: 5, right: 5),
+//            child: Text(
+//              from,
+//              style: TextStyle(color: Colors.grey),
+//            ),
+//          ),
           Padding(
             padding:
             person ? const EdgeInsets.only(
