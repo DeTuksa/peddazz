@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:peddazz/drawer.dart';
 import 'package:peddazz/feed/writeup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:peddazz/main.dart';
 
 class FeedPage extends StatefulWidget {
   @override
@@ -49,6 +51,8 @@ class _FeedPageState extends State<FeedPage> {
           ],
         ),
       ),
+      
+      drawer: globalDrawer(context),
 
       floatingActionButton: FloatingActionButton(
       child: Icon(FontAwesomeIcons.penFancy),

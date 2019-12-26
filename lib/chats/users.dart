@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:peddazz/drawer.dart';
 import 'package:peddazz/main.dart';
 
 class UsersDisplay extends StatefulWidget {
@@ -14,6 +15,9 @@ class UsersDisplayState extends State<UsersDisplay> {
       appBar: AppBar(
         title: Text("Users"),
       ),
+
+      drawer: globalDrawer(context),
+
       body: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance.collection("user").snapshots(),
         builder: (context, usersSnapshot) {
