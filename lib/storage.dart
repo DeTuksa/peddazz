@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peddazz/drawer.dart';
 import 'package:peddazz/recording/audio_file_page.dart';
 
 class Storage extends StatefulWidget {
@@ -13,6 +14,7 @@ class _StorageState extends State<Storage> {
       appBar: AppBar(
         title: Text("My Files"),
       ),
+      drawer: globalDrawer(context),
       body: SafeArea(
         top: false,
           bottom: false,
