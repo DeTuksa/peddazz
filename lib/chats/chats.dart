@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:peddazz/chats/message.dart';
+import 'package:peddazz/colors.dart';
 import 'package:peddazz/main.dart';
 
 class ChatUsers extends StatefulWidget {
@@ -51,7 +52,7 @@ class ChatUsersState extends State<ChatUsers> {
     messages.sort((snap1, snap2) {
       Timestamp stamp1 = snap1["timestamp"];
       Timestamp stamp2 = snap2["timestamp"];
-      return stamp1.compareTo(stamp2);
+      return stamp2.compareTo(stamp1);
     });
 
     List<Widget> messagesWidget = messages
@@ -121,52 +122,138 @@ class ChatUsersState extends State<ChatUsers> {
     }
     buildCount++;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Chat'),
-        centerTitle: true,
-      ),
-      body: SafeArea(
+      backgroundColor: AppColor.dark,
+      body: Container(
+//        decoration: BoxDecoration(
+//          borderRadius: BorderRadius.only(
+//            topRight: Radius.circular(30),
+//            topLeft: Radius.circular(30)
+//          )
+//        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
+
+            Container(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height*0.06, left: 10, right: 10, bottom: MediaQuery.of(context).size.height*0.02
+              ),
+              decoration: BoxDecoration(
+                color: AppColor.dark
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white60,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }
+                      ),
+
+                      Text(
+                        "Tuksa Emmanuel",
+                        style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white60
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Row(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          Icons.call,
+                          color: Colors.white60,
+                        ),
+                        onPressed: null,
+                      ),
+
+                      IconButton(
+                        icon: Icon(
+                          Icons.more_vert,
+                          color: Colors.white60,
+                        ),
+                        onPressed: null,
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+
             Expanded(
-              child: ListView(
-                controller: scroll,
-                children: buildMessageWidgets(),
+              child: Container(
+                padding: EdgeInsets.only(top: 5.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(30),
+                    topLeft: Radius.circular(30)
+                  ),
+                  color: Colors.white
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      topLeft: Radius.circular(30)
+                  ),
+                  child: ListView(
+                    reverse: true,
+                    controller: scroll,
+                    children: buildMessageWidgets(),
+                  ),
+                ),
               ),
             ),
             Container(
-                decoration: BoxDecoration(color: Colors.transparent),
+                decoration: BoxDecoration(color: Colors.white),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.photo),
+                      iconSize: 24,
+                      onPressed: null,
+                    ),
+
                     Expanded(
                       child: Padding(
                         padding:
-                            const EdgeInsets.only(bottom: 5, left: 5, right: 5),
+                            const EdgeInsets.only(left: 5, right: 5),
                         child: TextFormField(
+                          textCapitalization: TextCapitalization.sentences,
+                          style: TextStyle(
+                            height: 1,
+                            fontSize: 16
+                          ),
                           keyboardType: TextInputType.multiline,
                           maxLength: null,
                           maxLines: null,
                           onFieldSubmitted: (value) => callBack(),
                           controller: message,
-                          decoration: InputDecoration(
+                          decoration: InputDecoration.collapsed(
                             hintText: 'Enter a message',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(24)),
                           ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 5, right: 5),
-                      child: FloatingActionButton(
-                        child: Icon(Icons.send),
-                        onPressed: () {
-                          callBack();
-                        },
-                      ),
+
+                    IconButton(
+                      icon: Icon(Icons.send),
+                      iconSize: 24,
+                      onPressed: () {
+                        callBack();
+                      },
                     )
                   ],
                 ))

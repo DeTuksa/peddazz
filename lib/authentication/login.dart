@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:peddazz/colors.dart';
 import 'package:peddazz/main.dart';
 import 'package:peddazz/authentication/signup.dart';
 import 'package:peddazz/authentication/loading.dart';
@@ -60,146 +62,204 @@ class LoginBodyState extends State<LoginBody> {
   Widget build(BuildContext context) {
     return LoadingScreen(
       child: Form(
-          key: formKey,
-          child: ListView(
-            children: <Widget>[
-              Container(
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 40),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 140,
-                              left: MediaQuery.of(context).size.width * 0.05,
-                              right: MediaQuery.of(context).size.width * 0.05),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: TextFormField(
-                              controller: eMail,
-                              decoration: InputDecoration(
-                                icon: Icon(Icons.mail_outline,
-                                    color: Colors.deepPurple),
-                                hintText: "Enter school e-mail",
-                                labelText: "E-mail",
-                                hintStyle: TextStyle(
-                                    color: Colors.grey, fontSize: 18.0),
-                              ),
-                            ),
-                          ),
+        key: formKey,
+        child: ListView(
+          children: <Widget>[
+            InkWell(
+              onTap: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: MediaQuery.of(context).size.height*0.95,
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.white,
+                  ),
+
+                  Container(
+                    height: MediaQuery.of(context).size.height*0.25,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColor.dark, AppColor.appBar
+                        ],
+                        tileMode: TileMode.mirror
+                      ),
+//                    borderRadius: BorderRadius.only(
+//                      bottomLeft: Radius.circular(72),
+//                      bottomRight: Radius.circular(72)
+//                    )
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height*0.04,
+                          left: MediaQuery.of(context).size.width*0.08
+                      ),
+                      child: Text(
+                        "LOGIN",
+                        style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.height*0.026,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 20,
-                              left: MediaQuery.of(context).size.width * 0.05,
-                              right: MediaQuery.of(context).size.width * 0.05),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            child: TextFormField(
-                              controller: passWord,
-                              decoration: InputDecoration(
-                                  icon: Icon(Icons.lock_outline,
-                                      color: Colors.deepPurple),
-                                  hintText: "Enter password",
-                                  labelText: "Password",
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey, fontSize: 18.0),
-                                  suffixIcon: IconButton(
-                                      icon: Icon(Icons.remove_red_eye),
-                                      onPressed: _toggle)),
-                              obscureText: _obscureText,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 40.0,
-                            left: MediaQuery.of(context).size.width * 0.05,
-                            right: MediaQuery.of(context).size.width * 0.05,
-                          ),
-                          child: CustomCircularProgressIndicator(
-                            key: indicatorKey,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 80.0,
-                              left: MediaQuery.of(context).size.width * 0.05,
-                              right: MediaQuery.of(context).size.width * 0.05),
-                          child: Center(
-                            child: RaisedButton(
-                              color: Colors.deepPurple,
-                              onPressed: () async {
-                                FocusScope.of(context).requestFocus(new FocusNode());
-                                bool activeConnection = false;
-                                try {
-                                  final result = await InternetAddress.lookup(
-                                      "google.com");
-                                  if (result.isNotEmpty &&
-                                      result[0].rawAddress.isNotEmpty) {
-                                    activeConnection = true;
-                                  }
-                                } catch (e) {
-                                  activeConnection = false;
-                                }
-                                if (activeConnection == true) {
-                                  signInWithEmail();
-                                } else {
-                                  Scaffold.of(context).showSnackBar(SnackBar(
-                                    content: Text("No internet connection"),
-                                  ));
-                                }
-                              },
-                              child: Text(
-                                "Login",
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.white),
-                              ),
-                              shape: StadiumBorder(),
-                              disabledColor: Colors.deepPurple,
-                              padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.06,
-                                vertical:
-                                    MediaQuery.of(context).size.width * 0.03,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 80.0,
-                              left: MediaQuery.of(context).size.width * 0.05,
-                              right: MediaQuery.of(context).size.width * 0.05),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text("Don't have an account?"),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pushNamed("sign_up");
-                                },
-                                child: Text(
-                                  " Signup",
-                                  style: TextStyle(color: Colors.deepPurple),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
-          )),
+
+                  Positioned(
+                    top: MediaQuery.of(context).size.height*0.2,
+//                  left: MediaQuery.of(context).size.width*0.03,
+//                  right: MediaQuery.of(context).size.width*0.03,
+                    child: Center(
+                      child: Container(
+                          height: MediaQuery.of(context).size.height*0.75,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(42),
+                              topRight: Radius.circular(42)
+                            ),
+                            color: Colors.white
+                          ),
+                        child: ListView(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height*0.05,
+                                left: MediaQuery.of(context).size.width*0.08
+                              ),
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height*0.08,
+                                left: MediaQuery.of(context).size.width*0.04,
+                                right: MediaQuery.of(context).size.width*0.04
+                              ),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width*0.8,
+                                child: Center(
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.emailAddress,
+                                    controller: eMail,
+                                    decoration: InputDecoration(
+                                      icon: Icon(
+                                        Icons.mail_outline,
+                                        color: AppColor.primary,
+                                      ),
+                                      labelText: 'E-mail'
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height*0.05,
+                                  left: MediaQuery.of(context).size.width*0.04,
+                                  right: MediaQuery.of(context).size.width*0.04
+                              ),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width*0.8,
+                                child: Center(
+                                  child: TextFormField(
+                                    controller: passWord,
+                                    decoration: InputDecoration(
+                                        icon: Icon(
+                                          Icons.lock_outline,
+                                          color: AppColor.primary,
+                                        ),
+                                        labelText: 'Password',
+                                      suffixIcon: IconButton(
+                                        icon: Icon(CupertinoIcons.eye_solid),
+                                        onPressed: _toggle,
+                                      ),
+                                    ),
+                                    obscureText: _obscureText,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height*0.1,
+                                left: MediaQuery.of(context).size.width*0.05,
+                                right: MediaQuery.of(context).size.width*0.05
+                              ),
+                              child: Center(
+                                child: RaisedButton(
+                                  color: AppColor.primary,
+                                  onPressed: () async {
+                                    FocusScope.of(context).requestFocus(new FocusNode());
+                                    bool activeConnection = false;
+                                    try {
+                                      final result = await InternetAddress.lookup("googl.com");
+                                      if(result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                                        activeConnection = true;
+                                      }
+                                    } catch (e) {
+                                      activeConnection = false;
+                                    }
+                                    if(activeConnection == true) {
+                                      signInWithEmail();
+                                    } else {
+                                      Scaffold.of(context).showSnackBar(SnackBar(content: Text("No internet connection")));
+                                    }
+                                  },
+                                  child: Text(
+                                    "Login",
+                                    style: TextStyle(
+                                      fontSize: MediaQuery.of(context).size.height*0.02,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white
+                                    ),
+                                  ),
+                                  shape: StadiumBorder(),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: MediaQuery.of(context).size.width*0.06,
+                                    vertical: MediaQuery.of(context).size.width*0.03
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.width * 0.2,
+                                  left: MediaQuery.of(context).size.width * 0.05,
+                                  right: MediaQuery.of(context).size.width * 0.05),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text("Don't have an account?"),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed("sign_up");
+                                    },
+                                    child: Text(
+                                      " Signup",
+                                      style: TextStyle(color: AppColor.primary),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        ),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
       inAsyncCall: loadingVisible,
     );
   }

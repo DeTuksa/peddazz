@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart' as prefix0;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peddazz/colors.dart';
 import 'package:peddazz/main.dart';
 
@@ -27,7 +25,7 @@ Drawer globalDrawer(
                     borderRadius: BorderRadius.all(Radius.circular(60.0)),
                     child: GestureDetector(
                       onTap: null,
-                      child: Icon(Icons.photo_camera),
+                      child: Image.asset('images/index.png'),
                     ),
                   ),
                 ),
@@ -93,25 +91,7 @@ Drawer globalDrawer(
               Navigator.pop(context);
               Navigator.of(context).popAndPushNamed("audio_recording");
             }
-        ),
-        Divider(
-          height: 33,
-        ),
-        ListTile(
-          title: Text('Settings'),
-          trailing: Icon(Icons.settings),
-          onTap: ()
-          {
-            Navigator.popAndPushNamed(context, "settings");
-          },
-        ),
-        ListTile(
-          title:Text('Sign Out'),
-          trailing: Icon(Icons.power_settings_new, color: Colors.red),
-          onTap: () {
-            FirebaseAuth.instance.signOut();
-          },
-        ),
+        )
       ],
     ),
   );

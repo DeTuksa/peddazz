@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:peddazz/colors.dart';
+import 'package:peddazz/main.dart';
 //import 'package:peddazz/main.dart';
 
 class Settings extends StatefulWidget {
@@ -9,93 +13,268 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double height = size.height;
+    double width = size.width;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text("Settings"),
-      ),
-
       body: ListView(
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height*0.02,
-              left: MediaQuery.of(context).size.height*0.02,
-              bottom: MediaQuery.of(context).size.height*0.02
-            ),
-
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.height*0.075,
-                  height: MediaQuery.of(context).size.height*0.075,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(60)),
-                    child: Image.asset("images/index.png"),
+          Stack(
+            children: <Widget>[
+              Container(
+                height: height-40,
+                width: width,
+              ),
+              Container(
+                height: height*0.25,
+                width: width,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColor.appBar, AppColor.dark
+                    ]
                   ),
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.elliptical(48, 18),
+                    bottomLeft: Radius.elliptical(48, 18)
+                  )
                 ),
 
-                Padding(
+
+                child: Padding(
                   padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height*0.025,
-                    left: MediaQuery.of(context).size.height*0.015
+                    top: height*0.04,
+                    left: width*0.05
                   ),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Username",
+                          "Profile",
                         style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height*0.02
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white
                         ),
-                        ),
-
-                        Text(
-                          "About individual",
-                          style: TextStyle(
-                            color: Colors.grey
-                          )
-                        )
+                      )
                     ],
                   ),
-                )
-              ],
-            )
-          ),
+                ),
+              ),
+              Positioned(
+                top: height*0.18,
+                left: width*0.05,
+                right: width*0.05,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(24)),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 1.0,
+                      )
+                    ]
+                  ),
+                  height: 435,
+                  width: width*0.9,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      top: 70,
+                    ),
+                    child: Column(
+                      children: <Widget>[
 
-          Divider(
-            color: Colors.grey,
-          ),
+                        Text(
+                          "Tuksa Emmanuel",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500
+                          ),
+                        ),
 
-          ListTile(
-            leading: Icon(Icons.notifications),
-            title: Text("Notifications"),
-            onTap: null,
-          ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: Text(
+                            MyApp.user.email,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey
+                            ),
+                          ),
+                        ),
 
-          ListTile(
-            leading: Icon(Icons.help_outline),
-            title: Text("Help"),
-            onTap: null,
-          ),
+                        Divider(),
 
-          ListTile(
-            leading: Icon(Icons.people),
-            title: Text("Invite a friend"),
-            onTap: null,
-          ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.notifications,
+                            color: AppColor.icon,
+                          ),
+                          title: Text(
+                            "Notification",
+                            style: TextStyle(
+                              color: Colors.grey.shade600
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColor.icon,
+                            size: 18,
+                          ),
+                        ),
 
-          ListTile(
-            leading: Icon(Icons.info_outline),
-            title: Text("About Peddazz"),
-            onTap: null,
-          ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.help_outline,
+                            color: AppColor.icon,
+                          ),
+                          title: Text(
+                            "Help",
+                            style: TextStyle(
+                                color: Colors.grey.shade600
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColor.icon,
+                            size: 18,
+                          ),
+                        ),
+
+                        ListTile(
+                          leading: Icon(
+                            Icons.share,
+                            color: AppColor.icon,
+                          ),
+                          title: Text(
+                            "Share with a friend",
+                            style: TextStyle(
+                                color: Colors.grey.shade600
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColor.icon,
+                            size: 18,
+                          ),
+                        ),
+
+                        ListTile(
+                          leading: Icon(
+                            Icons.feedback,
+                            color: AppColor.icon,
+                          ),
+                          title: Text(
+                            "Review",
+                            style: TextStyle(
+                                color: Colors.grey.shade600
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColor.icon,
+                            size: 18,
+                          ),
+                        ),
+
+                        ListTile(
+                          leading: Icon(
+                            Icons.info_outline,
+                            color: AppColor.icon,
+                          ),
+                          title: Text(
+                            "About",
+                            style: TextStyle(
+                                color: Colors.grey.shade600
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColor.icon,
+                            size: 18,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              Positioned(
+                top: height*0.1,
+                left: width*0.3,
+                right: width*0.3,
+                child: Container(
+                  height: 120,
+                  width: 120,
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(72),
+                      child: Image.asset("images/index.png"),
+                    ),
+                  ),
+                ),
+              ),
+
+              Positioned(
+                top: height*0.865,
+                child: Container(
+                  width: width,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: width*0.05,
+                      right: width*0.05,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        FlatButton(
+                          child: Icon(
+                            Icons.arrow_back,
+                            size: 24,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(6.0))
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10
+                          ),
+                          color: AppColor.light,
+                        ),
+
+                        FlatButton(
+                          onPressed: () {
+                            FirebaseAuth.instance.signOut();
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(6.0))
+                          ),
+                          child: Text(
+                            "Logout",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600
+                            ),
+                          ),
+                          color: Colors.red.shade400,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 12, horizontal: width*0.2
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          )
         ],
       ),
     );

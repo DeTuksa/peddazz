@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:audio_recorder/audio_recorder.dart';
 import 'package:path/path.dart' as q;
 import 'package:path_provider/path_provider.dart';
-import 'package:peddazz/drawer.dart';
 import 'package:peddazz/recording/audio_file_page.dart';
 import 'dart:io';
 import 'save_recording.dart';
@@ -164,8 +163,6 @@ class _AudioRecordingState extends State<AudioRecording> {
                 "Recording",
               ),
             ),
-            
-            drawer: globalDrawer(context),
 //            body: Builder(
 //              builder: (BuildContext context) {
 //                return new Card(

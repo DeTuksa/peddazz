@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:peddazz/colors.dart';
 
 class Message extends StatelessWidget {
   final String from;
@@ -36,16 +37,24 @@ class Message extends StatelessWidget {
               bottom: 10
               ),
             child: Material(
-              color: person ? Colors.white70 : Colors.blueGrey,
-              borderRadius: BorderRadius.circular(10.0),
-              elevation: 6.0,
+              color: person ? AppColor.login1 : AppColor.appBar,
+              borderRadius: person ? BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+                bottomLeft: Radius.circular(10)
+              ) : BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomRight: Radius.circular(10)
+              ) ,
+              elevation: 2.0,
               child: Container(
                 //width: MediaQuery.of(context).size.width*0.75,
                 padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                 child: Text(
                   text,
                   style: TextStyle(
-                    color: person ? Colors.black : Colors.white
+                    color: Colors.white
                   ),
                   ),
               ),

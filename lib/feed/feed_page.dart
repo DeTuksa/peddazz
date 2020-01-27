@@ -1,61 +1,121 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:peddazz/drawer.dart';
+import 'package:peddazz/colors.dart';
+//import 'package:peddazz/drawer.dart';
 import 'package:peddazz/feed/writeup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:peddazz/main.dart';
+import 'package:peddazz/widgets/menu.dart';
+//import 'package:peddazz/main.dart';
 
 class FeedPage extends StatefulWidget {
   @override
   _FeedPageState createState() => _FeedPageState();
 }
 
-class _FeedPageState extends State<FeedPage> {
+class _FeedPageState extends State<FeedPage> with SingleTickerProviderStateMixin {
+
+  bool isCollapsed = true;
+  final Duration duration = Duration(milliseconds: 300);
+  AnimationController controller;
+  Animation<double> scaleAnimation;
+  Animation<double> menuAnimation;
+  Animation<Offset> slideAnimation;
 
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Firestore firestore = Firestore.instance;
 
   TextEditingController message = TextEditingController();
   ScrollController scroll = ScrollController();
+  TextEditingController searchController = TextEditingController();
+
+  int page = 1;
+
+  Key textKey;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller = AnimationController(vsync: this, duration: duration);
+    scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(controller);
+    menuAnimation = Tween<double>(begin: 0.5, end: 1).animate(controller);
+    slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0)).animate(controller);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
       appBar: AppBar(
+        leading: IconButton(icon: Icon(Icons.menu), onPressed: () {
+          setState(() {
+            if(isCollapsed)
+              controller.forward();
+            else
+              controller.reverse();
+
+            isCollapsed = !isCollapsed;
+          });
+        }),
+        elevation: 0,
         title: Text(
-          'Feed'
+          'Feed',
+          style: TextStyle(
+            color: Colors.black
+          ),
         ),
+        backgroundColor: Colors.transparent,
         centerTitle: true,
       ),
 
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         child: Row(
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             IconButton(
-                icon: Icon(FontAwesomeIcons.school),
-                onPressed: null
+                icon: Icon(
+                  CupertinoIcons.news,
+                  size: 22,
+                ),
+                onPressed: () {
+                }
             ),
             IconButton(
-                icon: Icon(FontAwesomeIcons.search),
-                onPressed: null
+                icon: Icon(
+                  CupertinoIcons.search,
+                  size: 22,
+                ),
+                onPressed: () {
+                }
             ),
             IconButton(
-                icon: Icon(FontAwesomeIcons.bell),
-                onPressed: null
+                icon: Icon(
+                  Icons.notifications_none,
+                  size: 22,
+                ),
+                onPressed: () {
+                }
             )
           ],
         ),
       ),
-      
-      drawer: globalDrawer(context),
 
       floatingActionButton: FloatingActionButton(
-      child: Icon(FontAwesomeIcons.penFancy),
+        backgroundColor: AppColor.dark,
+      child: Icon(
+        CupertinoIcons.pen,
+        size: 22,
+      ),
       onPressed: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) => PenThoughts()));
       },
@@ -63,33 +123,105 @@ class _FeedPageState extends State<FeedPage> {
 
     floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
 
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: firestore.collection('Feed').orderBy('timestamp', descending: true).snapshots(),
-                builder: (context, snapshot) {
-                  if(!snapshot.hasData)return Center(
+      body: Stack(
+        children: <Widget>[
+          menu(context, slideAnimation, menuAnimation),
+          AnimatedPositioned(
+            top: 0,
+            bottom: 0,
+            left: isCollapsed ? 0 : 0.6 * MediaQuery.of(context).size.width,
+            right: isCollapsed ? 0 : -0.4 * MediaQuery.of(context).size.width,
+            duration: duration,
+            child: ScaleTransition(
+              scale: scaleAnimation,
+              child: Material(
+                elevation: isCollapsed ? 0 : 4,
+                child: SafeArea(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: firestore.collection('Feed').orderBy('timestamp', descending: true).snapshots(),
+                          builder: (context, snapshot) {
+                            if(!snapshot.hasData)return Center(
 
-                  );
+                            );
 
-                  List<DocumentSnapshot> docs = snapshot.data.documents;
+                            List<DocumentSnapshot> docs = snapshot.data.documents;
 
-                  List<Widget> messages = docs.map((doc) => Feed(
-                    snapshot: doc,
-                  ) ).toList();
+                            List<Widget> messages = docs.map((doc) => Feed(
+                              snapshot: doc,
+                            ) ).toList();
 
-                  return ListView(
-                    controller: scroll,
-                    children: messages,
-                  );
-                },
+                            return ListView(
+                              controller: scroll,
+                              children: messages,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget searchPage() {
+    return SafeArea(
+      child: ListView(
+        physics: BouncingScrollPhysics(),
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height*0.02,
+              left: MediaQuery.of(context).size.height*0.02,
+              right: MediaQuery.of(context).size.height*0.02,
+              bottom: MediaQuery.of(context).size.height*0.02
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min
+
+              ,
+              children: <Widget>[
+                Container(
+                  height: 35,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset("images/index.png"),
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.height*0.02
+                  ),
+                  child: Container(
+                    height: 35,
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: TextFormField(
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30)
+                        ),
+                        labelText: 'Search feed',
+
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+
+          Divider()
+        ],
       ),
     );
   }
@@ -103,79 +235,126 @@ class Feed extends StatelessWidget{
   Widget build(BuildContext context){
     Timestamp timestamp = snapshot["timestamp"];
     Duration duration= Timestamp.now().toDate().difference(timestamp.toDate());
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: Text(
-                          snapshot["from"],
-                          style: TextStyle(
-                            fontSize: MediaQuery.of(context).size.height*0.0175,
-                            color: Colors.grey,
+
+    return InkWell(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Material(
+              elevation: 2,
+              borderRadius: BorderRadius.all(Radius.circular(3)),
+              child: Padding(
+                padding: EdgeInsets.all(3.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(30))
+                          ),
+                          child: ClipRRect(
+                            child: Image.asset("images/index.png"),
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
                           ),
                         ),
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                  snapshot["from"],
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600
+                                ),
+                              ),
+                              SizedBox(height: 3,),
+                              Text("SEET", style: TextStyle(
+                                color: AppColor.login2
+                              ),)
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 10, bottom: 15
                       ),
-                      Text(
-                        duration.inDays>5? "${timestamp.toDate().day}/${timestamp.toDate().month}/${timestamp.toDate().year}" :
-                        duration.inDays>=1?"${duration.inDays} ${duration.inDays<=1?"day":"days"} ago":
-                        duration.inHours>=1?"${duration.inHours}  ${duration.inHours<=1?"hour":"hours"} ago":
-                        duration.inMinutes>=1?"${duration.inMinutes} ${duration.inMinutes<=1?"minute":"minutes"} ago":
-                        "${duration.inSeconds} ${duration.inSeconds<=1?"second":"seconds"} ago",
+                      child: Text(
+                        snapshot["text"],
                         style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Icon(
-                          FontAwesomeIcons.share,
-                          size: 15,
+                            fontSize: MediaQuery.of(context).size.height*0.02125,
+                            color: Colors.black,
+                          letterSpacing: 0.5
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Icon(
-                          Icons.more_vert,
-                          size: 15,
+                    ),
+
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            InkWell(   //FIXME
+                              onTap: () {
+
+                              },
+                              child: Icon(
+                                  CupertinoIcons.conversation_bubble,
+                                  color: AppColor.icon,
+                                size: 22,
+                                ),
+                            ),
+                            SizedBox(height: 1,),
+                            Text("1")
+                          ],
                         ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-              Text(
-                  snapshot["text"],
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black
+
+                        Column(
+                          children: <Widget>[
+                            InkWell(   //FIXME
+                              onTap: () {
+
+                              },
+                              child: Icon(
+                                  Icons.star,
+                                  color: Colors.deepOrange,
+                                size: 22,
+                                ),
+                            ),
+                            SizedBox(height: 1,),
+                            Text("5")
+                          ],
+                        ),
+
+                        Text(
+                            duration.inDays>5? "${timestamp.toDate().day}/${timestamp.toDate().month}/${timestamp.toDate().year}" :
+                            duration.inDays>=1?"${duration.inDays} ${duration.inDays<=1?"day":"days"} ago":
+                            duration.inHours>=1?"${duration.inHours}  ${duration.inHours<=1?"hour":"hours"} ago":
+                            duration.inMinutes>=1?"${duration.inMinutes} ${duration.inMinutes<=1?"minute":"minutes"} ago":
+                            "${duration.inSeconds} ${duration.inSeconds<=1?"second":"seconds"} ago",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey
+                            )
+                        )
+                      ],
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
-        ),
-        Divider()
-      ],
+              ),
+            ),
+          )
     );
   }
 }
