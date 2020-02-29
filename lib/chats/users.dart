@@ -28,10 +28,12 @@ class UsersDisplayState extends State<UsersDisplay> {
               children: <Widget>[
                 IconButton(
                     icon: Icon(
-                      Icons.menu,
+                      Icons.arrow_back_ios,
                       color: Colors.white60,
                     ),
-                    onPressed: null
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }
                 ),
 
                 Text(

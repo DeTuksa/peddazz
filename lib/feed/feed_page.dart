@@ -39,7 +39,7 @@ class _FeedPageState extends State<FeedPage> with SingleTickerProviderStateMixin
     // TODO: implement initState
     super.initState();
     controller = AnimationController(vsync: this, duration: duration);
-    scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(controller);
+    scaleAnimation = Tween<double>(begin: 1, end: 1).animate(controller);
     menuAnimation = Tween<double>(begin: 0.5, end: 1).animate(controller);
     slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0)).animate(controller);
   }
@@ -65,22 +65,22 @@ class _FeedPageState extends State<FeedPage> with SingleTickerProviderStateMixin
             isCollapsed = !isCollapsed;
           });
         }),
-        elevation: 0,
+        elevation: 1,
         title: Text(
           'Feed',
           style: TextStyle(
             color: Colors.black
           ),
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         centerTitle: true,
       ),
 
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             IconButton(
                 icon: Icon(
@@ -90,14 +90,14 @@ class _FeedPageState extends State<FeedPage> with SingleTickerProviderStateMixin
                 onPressed: () {
                 }
             ),
-            IconButton(
-                icon: Icon(
-                  CupertinoIcons.search,
-                  size: 22,
-                ),
-                onPressed: () {
-                }
-            ),
+//            IconButton(
+//                icon: Icon(
+//                  CupertinoIcons.search,
+//                  size: 22,
+//                ),
+//                onPressed: () {
+//                }
+//            ),
             IconButton(
                 icon: Icon(
                   Icons.notifications_none,
@@ -121,7 +121,7 @@ class _FeedPageState extends State<FeedPage> with SingleTickerProviderStateMixin
       },
     ),
 
-    floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
       body: Stack(
         children: <Widget>[
@@ -228,12 +228,22 @@ class _FeedPageState extends State<FeedPage> with SingleTickerProviderStateMixin
 }
 
 
-class Feed extends StatelessWidget{
+class Feed extends StatefulWidget{
   final DocumentSnapshot snapshot;
   Feed({this.snapshot});
+
+  @override
+  _FeedState createState() => _FeedState();
+}
+
+class _FeedState extends State<Feed> {
+
+  bool isLiked = false;
+
   @override
   Widget build(BuildContext context){
-    Timestamp timestamp = snapshot["timestamp"];
+    Timestamp timestamp = widget.snapshot["timestamp"];
+    int _likes = widget.snapshot["likes"];
     Duration duration= Timestamp.now().toDate().difference(timestamp.toDate());
 
     return InkWell(
@@ -248,40 +258,43 @@ class Feed extends StatelessWidget{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(30))
+                    Container(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(30))
+                            ),
+                            child: ClipRRect(
+                              child: Image.asset("images/index.png"),
+                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                            ),
                           ),
-                          child: ClipRRect(
-                            child: Image.asset("images/index.png"),
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                          ),
-                        ),
 
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                  snapshot["from"],
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                    widget.snapshot["from"],
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 3,),
-                              Text("SEET", style: TextStyle(
-                                color: AppColor.login2
-                              ),)
-                            ],
-                          ),
-                        )
-                      ],
+                                SizedBox(height: 3,),
+                                Text("SEET", style: TextStyle(
+                                  color: AppColor.login2
+                                ),)
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
 
                     Padding(
@@ -289,7 +302,7 @@ class Feed extends StatelessWidget{
                         top: 10, bottom: 15
                       ),
                       child: Text(
-                        snapshot["text"],
+                        widget.snapshot["text"],
                         style: TextStyle(
                             fontSize: MediaQuery.of(context).size.height*0.02125,
                             color: Colors.black,
@@ -305,7 +318,8 @@ class Feed extends StatelessWidget{
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            InkWell(   //FIXME
+                            InkWell(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),//FIXME
                               onTap: () {
 
                               },
@@ -322,18 +336,30 @@ class Feed extends StatelessWidget{
 
                         Column(
                           children: <Widget>[
-                            InkWell(   //FIXME
+                            InkWell(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),//FIXME
                               onTap: () {
-
+                                setState(() {
+                                  isLiked = !isLiked;
+                                  if (isLiked) {
+                                    widget.snapshot.reference.updateData({'likes': FieldValue.increment(1)});
+                                  }
+                                  else {
+                                    widget.snapshot.reference.updateData({'likes': FieldValue.increment(-1)});
+                                  }
+                                });
                               },
-                              child: Icon(
+                              child: isLiked ? Icon(
                                   Icons.star,
                                   color: Colors.deepOrange,
                                 size: 22,
-                                ),
+                                ) : Icon(
+                                Icons.star_border,
+                                color: Colors.deepOrange,
+                              ),
                             ),
                             SizedBox(height: 1,),
-                            Text("5")
+                            _likes == 0 ? Text("") : Text("$_likes")
                           ],
                         ),
 

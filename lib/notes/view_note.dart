@@ -153,6 +153,10 @@ class _ViewNotePageState extends State<ViewNotePage> {
             FlatButton(
                 onPressed: () async {
                   await NotesDatabaseService.db.deleteNoteInDB(widget.currentNote);
+                  await NotesDatabaseService.db.init();
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.of(context).popAndPushNamed("notes");
                 },
                 child: Text(
                   'DELETE',

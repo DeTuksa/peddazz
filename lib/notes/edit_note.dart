@@ -195,6 +195,10 @@ class _EditNoteState extends State<EditNote> {
                 FlatButton(
                     onPressed: () async {
                       await NotesDatabaseService.db.deleteNoteInDB(currentNote);
+                      await NotesDatabaseService.db.init();
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.of(context).popAndPushNamed("notes");
                     },
                     child: Text(
                       'DELETE',

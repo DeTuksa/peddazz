@@ -25,18 +25,19 @@ class ChatUsersState extends State<ChatUsers> {
   Future<void> callBack() async {
     print(MyApp.user.email);
     if (message.text.length > 0) {
+      String _message = message.text;
+      message.clear();
       String receiverID = ModalRoute.of(context).settings.arguments;
       await firestore
           .collection('user')
           .document(receiverID)
           .collection("messages")
           .add({
-        'text': message.text,
+        'text': _message,
         'from': MyApp.user.email,
         'timestamp': Timestamp.now()
       });
-      message.clear();
-      scroll.animateTo(scroll.position.maxScrollExtent,
+      scroll.animateTo(scroll.position.minScrollExtent,
           curve: Curves.easeOut, duration: Duration(milliseconds: 300));
     }
   }

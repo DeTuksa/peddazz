@@ -148,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     requestAudioPermission();
     requestStoragePermission();
     controller = AnimationController(vsync: this, duration: duration);
-    scaleAnimation = Tween<double>(begin: 1, end: 0.8).animate(controller);
+    scaleAnimation = Tween<double>(begin: 1, end: 1).animate(controller);
     menuAnimation = Tween<double>(begin: 0.5, end: 1).animate(controller);
     slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0)).animate(controller);
   }
@@ -292,6 +292,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   scale: scaleAnimation,
                   child: Material(
                     elevation: isCollapsed ? 0 : 8,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      bottomLeft: Radius.circular(12)
+                    ),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       physics: ClampingScrollPhysics(),

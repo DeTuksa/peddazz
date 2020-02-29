@@ -76,11 +76,11 @@ class _SettingsState extends State<Settings> {
                       )
                     ]
                   ),
-                  height: 435,
+                  height: 410,
                   width: width*0.9,
                   child: Padding(
                     padding: EdgeInsets.only(
-                      top: 70,
+                      top: 60,
                     ),
                     child: Column(
                       children: <Widget>[
@@ -94,7 +94,7 @@ class _SettingsState extends State<Settings> {
                         ),
 
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
+                          padding: const EdgeInsets.only(bottom: 5),
                           child: Text(
                             MyApp.user.email,
                             style: TextStyle(
@@ -202,7 +202,7 @@ class _SettingsState extends State<Settings> {
               ),
 
               Positioned(
-                top: height*0.1,
+                top: height*0.085,
                 left: width*0.3,
                 right: width*0.3,
                 child: Container(

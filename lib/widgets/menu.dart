@@ -24,42 +24,42 @@ Widget menu(context, slideAnimation, menuAnimation) {
                 leading: Icon(FontAwesomeIcons.clipboard),
                 title: Text("Planner"),
                 onTap: () {
-                  Navigator.of(context).pushNamed("planner");
+                  Navigator.of(context).popAndPushNamed("planner");
                 },
               ),
               ListTile(
                 leading: Icon(FontAwesomeIcons.paperPlane),
                 title: Text("Chats"),
                 onTap: () {
-                  Navigator.of(context).pushNamed("chats");
+                  Navigator.of(context).popAndPushNamed("chats");
                 },
               ),
               ListTile(
                 leading: Icon(Icons.trending_up),
                 title: Text("Feed"),
                 onTap: () {
-                  Navigator.of(context).pushNamed("feed");
+                  Navigator.of(context).popAndPushNamed("feed");
                 },
               ),
               ListTile(
                 leading: Icon(Icons.folder_shared),
                 title: Text("My Files"),
                 onTap: () {
-                  Navigator.of(context).pushNamed("files");
+                  Navigator.of(context).popAndPushNamed("files");
                 },
               ),
               ListTile(
                 leading: Icon(FontAwesomeIcons.book),
                 title: Text("Notes"),
                 onTap: () {
-                  Navigator.of(context).pushNamed("notes");
+                  Navigator.of(context).popAndPushNamed("notes");
                 },
               ),
               ListTile(
                 leading: Icon(Icons.mic),
                 title: Text("Recordings"),
                 onTap: () {
-                  Navigator.of(context).pushNamed("audio_recording");
+                  Navigator.of(context).popAndPushNamed("audio_recording");
                 },
               )
             ],

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:peddazz/colors.dart';
 import 'package:peddazz/notes/database.dart';
 import 'package:peddazz/notes/edit_note.dart';
 import 'package:peddazz/notes/note_model.dart';
@@ -45,6 +46,7 @@ class _NotesScreenState extends State<NotesScreen> {
           gotoEditNote();
         },
         child: Icon(Icons.add),
+        backgroundColor: AppColor.dark,
       ),
       
       body: GestureDetector(
