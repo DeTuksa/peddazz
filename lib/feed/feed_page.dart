@@ -65,7 +65,17 @@ class _FeedPageState extends State<FeedPage> with SingleTickerProviderStateMixin
             isCollapsed = !isCollapsed;
           });
         }),
-        elevation: 1,
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+
+            },
+            tooltip: 'Search',
+            icon: Icon(Icons.search),
+            color: Colors.black,
+          )
+        ],
+        elevation: 2,
         title: Text(
           'Feed',
           style: TextStyle(
@@ -238,12 +248,13 @@ class Feed extends StatefulWidget{
 
 class _FeedState extends State<Feed> {
 
-  bool isLiked = false;
+  //bool isLiked = false;
 
   @override
   Widget build(BuildContext context){
     Timestamp timestamp = widget.snapshot["timestamp"];
     int _likes = widget.snapshot["likes"];
+    bool isLiked = widget.snapshot['isLiked'];
     Duration duration= Timestamp.now().toDate().difference(timestamp.toDate());
 
     return InkWell(
@@ -339,13 +350,16 @@ class _FeedState extends State<Feed> {
                             InkWell(
                               borderRadius: BorderRadius.all(Radius.circular(12)),//FIXME
                               onTap: () {
+                                print('${widget.snapshot['isLiked']}');
                                 setState(() {
                                   isLiked = !isLiked;
                                   if (isLiked) {
                                     widget.snapshot.reference.updateData({'likes': FieldValue.increment(1)});
+                                    widget.snapshot.reference.updateData({'isLiked': true});
                                   }
                                   else {
                                     widget.snapshot.reference.updateData({'likes': FieldValue.increment(-1)});
+                                    widget.snapshot.reference.updateData({'isLiked': false});
                                   }
                                 });
                               },
