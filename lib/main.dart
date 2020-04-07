@@ -15,6 +15,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:peddazz/notes/notescreen.dart';
 import 'package:peddazz/planner/planner_home.dart';
 import 'package:peddazz/recording/audio_recording.dart';
+import 'package:peddazz/settings/help.dart';
 import 'package:peddazz/storage.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
 //        accentIconTheme: IconThemeData(
 //          color: AppColor.dark
 //        )
-        
+
       ),
       home: handleCurrentScreen(),
       debugShowCheckedModeBanner: false,
@@ -64,7 +65,8 @@ class MyApp extends StatelessWidget {
         "audio_recording": (context) => AudioRecording(),
         "files": (context) => Storage(),
         "notes":(context) => NotesScreen(),
-        "planner":(context) => PlannerHome()
+        "planner":(context) => PlannerHome(),
+        "help": (context) => Help()
       },
     );
   }

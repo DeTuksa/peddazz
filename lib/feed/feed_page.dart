@@ -6,6 +6,7 @@ import 'package:peddazz/colors.dart';
 //import 'package:peddazz/drawer.dart';
 import 'package:peddazz/feed/writeup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:peddazz/main.dart';
 import 'package:peddazz/widgets/menu.dart';
 //import 'package:peddazz/main.dart';
 
@@ -248,13 +249,14 @@ class Feed extends StatefulWidget{
 
 class _FeedState extends State<Feed> {
 
-  //bool isLiked = false;
+  bool isLiked = false;
 
   @override
   Widget build(BuildContext context){
     Timestamp timestamp = widget.snapshot["timestamp"];
     int _likes = widget.snapshot["likes"];
-    bool isLiked = widget.snapshot['isLiked'];
+    bool userLike = widget.snapshot[''];
+    //bool isLiked = widget.snapshot['isLiked'];
     Duration duration= Timestamp.now().toDate().difference(timestamp.toDate());
 
     return InkWell(
@@ -354,11 +356,14 @@ class _FeedState extends State<Feed> {
                                 setState(() {
                                   isLiked = !isLiked;
                                   if (isLiked) {
+                                    widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').setData({'isLiked': true});
                                     widget.snapshot.reference.updateData({'likes': FieldValue.increment(1)});
                                     widget.snapshot.reference.updateData({'isLiked': true});
                                   }
                                   else {
                                     widget.snapshot.reference.updateData({'likes': FieldValue.increment(-1)});
+                                    widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').updateData({'isliked': false});
+                                    widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').delete();
                                     widget.snapshot.reference.updateData({'isLiked': false});
                                   }
                                 });

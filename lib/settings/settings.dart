@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peddazz/colors.dart';
 import 'package:peddazz/main.dart';
-//import 'package:peddazz/main.dart';
+import 'package:share/share.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -140,6 +140,9 @@ class _SettingsState extends State<Settings> {
                             color: AppColor.icon,
                             size: 18,
                           ),
+                          onTap: () {
+                            Navigator.of(context).pushNamed("help");
+                          },
                         ),
 
                         ListTile(
@@ -158,6 +161,13 @@ class _SettingsState extends State<Settings> {
                             color: AppColor.icon,
                             size: 18,
                           ),
+                          onTap: () {
+                            final RenderBox box = context.findRenderObject();
+                            Share.share("Check out Peddazz, I use it to check trends at my school,"
+                                " plan school activities, message and call people. Get it for free"
+                                " at https://peddazz.com",
+                                sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+                          },
                         ),
 
                         ListTile(
@@ -234,6 +244,7 @@ class _SettingsState extends State<Settings> {
                         FlatButton(
                           child: Icon(
                             Icons.arrow_back,
+                            color: Colors.white,
                             size: 24,
                           ),
                           onPressed: () {
@@ -245,7 +256,7 @@ class _SettingsState extends State<Settings> {
                           padding: EdgeInsets.symmetric(
                             vertical: 10
                           ),
-                          color: AppColor.light,
+                          color: AppColor.dark,
                         ),
 
                         FlatButton(
