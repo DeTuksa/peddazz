@@ -72,11 +72,12 @@ class UsersDisplayState extends State<UsersDisplay> {
                         return ListTile(
                           onTap: () {
                             Navigator.pushNamed(context, "chatPage",
-                                arguments: usersSnapshot.data.documents[count]
-                                ["userID"]);
+                                arguments: {"id": usersSnapshot.data.documents[count]["userID"],
+                                  'firstname': usersSnapshot.data.documents[count]["firstName"],
+                                  'lastname': usersSnapshot.data.documents[count]["lastName"]});
                           },
                           title: Text(
-                              "${usersSnapshot.data.documents[count]["firstName"]} ${usersSnapshot.data.documents[count]["lastName"]}"),
+                              "${usersSnapshot.data.documents[count]["lastName"]} ${usersSnapshot.data.documents[count]["firstName"]}"),
                           subtitle:
                           Text("${usersSnapshot.data.documents[count]["email"]}"),
                         );

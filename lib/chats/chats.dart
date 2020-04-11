@@ -27,7 +27,8 @@ class ChatUsersState extends State<ChatUsers> {
     if (message.text.length > 0) {
       String _message = message.text;
       message.clear();
-      String receiverID = ModalRoute.of(context).settings.arguments;
+      final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+      String receiverID = arguments['id'];
       await firestore
           .collection('user')
           .document(receiverID)
@@ -83,9 +84,11 @@ class ChatUsersState extends State<ChatUsers> {
 
   @override
   Widget build(BuildContext context) {
+    final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+    String displayName = arguments['lastname'] + ' ' + arguments['firstname'];
     if (buildCount == 0) {
       Function getMessages = () async {
-        String receiverID = ModalRoute.of(context).settings.arguments;
+        String receiverID = arguments['id'];
         String receiversEmail;
         await Firestore.instance
             .collection("user")
@@ -159,7 +162,7 @@ class ChatUsersState extends State<ChatUsers> {
                       ),
 
                       Text(
-                        "Tuksa Emmanuel",
+                        displayName,
                         style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
