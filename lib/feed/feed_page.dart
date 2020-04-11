@@ -8,7 +8,7 @@ import 'package:peddazz/feed/writeup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peddazz/main.dart';
 import 'package:peddazz/widgets/menu.dart';
-//import 'package:peddazz/main.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedPage extends StatefulWidget {
   @override
@@ -253,10 +253,10 @@ class _FeedState extends State<Feed> {
 
   @override
   Widget build(BuildContext context){
+    //widget.snapshot.reference.updateData({'${MyApp.user.displayName}': false});
     Timestamp timestamp = widget.snapshot["timestamp"];
     int _likes = widget.snapshot["likes"];
-    bool userLike = widget.snapshot[''];
-    //bool isLiked = widget.snapshot['isLiked'];
+    var userLike = widget.snapshot['${MyApp.user.displayName}'];
     Duration duration= Timestamp.now().toDate().difference(timestamp.toDate());
 
     return InkWell(
@@ -351,24 +351,34 @@ class _FeedState extends State<Feed> {
                           children: <Widget>[
                             InkWell(
                               borderRadius: BorderRadius.all(Radius.circular(12)),//FIXME
-                              onTap: () {
+                              onTap: () async {
+                                widget.snapshot.reference.updateData({'${MyApp.user.displayName}': 0});
+                                print(userLike);
+                                print('${MyApp.user.displayName}');
+                                print('${widget.snapshot['${MyApp.user.displayName}']}');
                                 print('${widget.snapshot['isLiked']}');
+                                //print('${widget.snapshot.reference.firestore.collection('List of likes').document('${MyApp.user.email}').get()}');
                                 setState(() {
-                                  isLiked = !isLiked;
-                                  if (isLiked) {
-                                    widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').setData({'isLiked': true});
+                                  if (userLike != 1) {
+                                    widget.snapshot.reference.updateData({'${MyApp.user.displayName}': 1});
+                                    //widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').updateData({'isLiked': true});
                                     widget.snapshot.reference.updateData({'likes': FieldValue.increment(1)});
                                     widget.snapshot.reference.updateData({'isLiked': true});
                                   }
                                   else {
+                                    widget.snapshot.reference.updateData({'${MyApp.user.displayName}': 0});
                                     widget.snapshot.reference.updateData({'likes': FieldValue.increment(-1)});
-                                    widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').updateData({'isliked': false});
-                                    widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').delete();
+                                    //widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').updateData({'isliked': false});
+                                    //widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').delete();
                                     widget.snapshot.reference.updateData({'isLiked': false});
                                   }
                                 });
                               },
-                              child: isLiked ? Icon(
+                              child: _likes ==0 ? Icon(
+                                Icons.star_border,
+                                color: Colors.deepOrange,
+                                size: 22,
+                              ) : widget.snapshot['${MyApp.user.displayName}'] == 1 ? Icon(
                                   Icons.star,
                                   color: Colors.deepOrange,
                                 size: 22,

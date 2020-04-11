@@ -22,10 +22,9 @@ class _PenThoughtsState extends State<PenThoughts> {
     if(message.text.length > 0) {
       await firestore.collection('Feed').add({
         'text': message.text,
-        'from': MyApp.user.email,
+        'from': MyApp.user.displayName,
         'timestamp': Timestamp.now(),
         'likes': 0,
-        'isLiked': false,
       });
 
       message.clear();

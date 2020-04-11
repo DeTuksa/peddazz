@@ -86,7 +86,7 @@ class _SettingsState extends State<Settings> {
                       children: <Widget>[
 
                         Text(
-                          "Tuksa Emmanuel",
+                          "${MyApp.user.displayName}",
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500
@@ -261,7 +261,7 @@ class _SettingsState extends State<Settings> {
 
                         FlatButton(
                           onPressed: () {
-                            FirebaseAuth.instance.signOut();
+                            logOutDialog();
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(6.0))
@@ -288,6 +288,42 @@ class _SettingsState extends State<Settings> {
           )
         ],
       ),
+    );
+  }
+
+  Future<void> logOutDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12))
+          ),
+          title: Text('Sign Out?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure you want to sign out?')
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('NO'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('YES'),
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+            )
+          ],
+        );
+      }
     );
   }
 }

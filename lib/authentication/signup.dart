@@ -50,7 +50,7 @@ class SignUpState extends State<SignUp> {
                       color: Colors.white,
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      height: MediaQuery.of(context).size.height * 0.3,
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -73,7 +73,7 @@ class SignUpState extends State<SignUp> {
                       ),
                     ),
                     Positioned(
-                      top: MediaQuery.of(context).size.height * 0.14,
+                      top: MediaQuery.of(context).size.height * 0.2,
                       child: Center(
                         child: Container(
                           height: MediaQuery.of(context).size.height * 0.75,
@@ -88,7 +88,7 @@ class SignUpState extends State<SignUp> {
                             children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.only(
-                                  top: MediaQuery.of(context).size.height*0.02,
+                                  top: MediaQuery.of(context).size.height*0.13,
                                   left: MediaQuery.of(context).size.width*0.05,
                                   right: MediaQuery.of(context).size.width*0.05
                                 ),
@@ -198,54 +198,54 @@ class SignUpState extends State<SignUp> {
                                 ),
                               ),
 
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height*0.03,
-                                    left: MediaQuery.of(context).size.width*0.05,
-                                    right: MediaQuery.of(context).size.width*0.05
-                                ),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*0.8,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      labelText: "Phone Number"
-                                    ),
-                                  ),
-                                ),
-                              ),
+//                              Padding(
+//                                padding: EdgeInsets.only(
+//                                    top: MediaQuery.of(context).size.height*0.03,
+//                                    left: MediaQuery.of(context).size.width*0.05,
+//                                    right: MediaQuery.of(context).size.width*0.05
+//                                ),
+//                                child: Container(
+//                                  width: MediaQuery.of(context).size.width*0.8,
+//                                  child: TextFormField(
+//                                    keyboardType: TextInputType.number,
+//                                    decoration: InputDecoration(
+//                                      labelText: "Phone Number"
+//                                    ),
+//                                  ),
+//                                ),
+//                              ),
 
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height*0.03,
-                                    left: MediaQuery.of(context).size.width*0.05,
-                                    right: MediaQuery.of(context).size.width*0.05
-                                ),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*0.8,
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                        labelText: "Department"
-                                    ),
-                                  ),
-                                ),
-                              ),
+//                              Padding(
+//                                padding: EdgeInsets.only(
+//                                    top: MediaQuery.of(context).size.height*0.03,
+//                                    left: MediaQuery.of(context).size.width*0.05,
+//                                    right: MediaQuery.of(context).size.width*0.05
+//                                ),
+//                                child: Container(
+//                                  width: MediaQuery.of(context).size.width*0.8,
+//                                  child: TextFormField(
+//                                    decoration: InputDecoration(
+//                                        labelText: "Department"
+//                                    ),
+//                                  ),
+//                                ),
+//                              ),
 
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height*0.03,
-                                    left: MediaQuery.of(context).size.width*0.05,
-                                    right: MediaQuery.of(context).size.width*0.05
-                                ),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*0.8,
-                                  child: TextFormField(
-                                    decoration: InputDecoration(
-                                        labelText: "Level"
-                                    ),
-                                  ),
-                                ),
-                              ),
+//                              Padding(
+//                                padding: EdgeInsets.only(
+//                                    top: MediaQuery.of(context).size.height*0.03,
+//                                    left: MediaQuery.of(context).size.width*0.05,
+//                                    right: MediaQuery.of(context).size.width*0.05
+//                                ),
+//                                child: Container(
+//                                  width: MediaQuery.of(context).size.width*0.8,
+//                                  child: TextFormField(
+//                                    decoration: InputDecoration(
+//                                        labelText: "Level"
+//                                    ),
+//                                  ),
+//                                ),
+//                              ),
 
                               Padding(
                                 padding: EdgeInsets.only(
@@ -366,6 +366,13 @@ class SignUpState extends State<SignUp> {
         password: passWord.text.trim(),
       ))
           .user;
+      MyApp.user = await FirebaseAuth.instance.currentUser();
+      UserUpdateInfo updateInfo = UserUpdateInfo();
+      updateInfo.displayName = lastName.text.trim() + ' ' + firstName.text.trim();
+      await MyApp.user.updateProfile(updateInfo);
+      await MyApp.user.reload();
+      MyApp.user = await FirebaseAuth.instance.currentUser();
+      print('UserName is ${MyApp.user.displayName}');
     } catch (e) {
       print(e.toString());
     } finally {
