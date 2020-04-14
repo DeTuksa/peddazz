@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:peddazz/message_handler.dart';
 import 'package:peddazz/recording/audio_recording.dart';
 import 'package:peddazz/storage.dart';
 import 'dart:io';
@@ -83,7 +84,9 @@ class MyApp extends StatelessWidget {
                   ),
                 );
               }
-              return MyHomePage();
+              return MessageHandler(
+                child: MyHomePage(),
+              );
             },
           );
         } else {
