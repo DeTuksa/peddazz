@@ -27,7 +27,6 @@ dependencies:
   image_picker:
   audio_recorder: ^1.0.2
   image_cropper:
-  audio_recorder:
   path_provider:
   uuid:
   path:
