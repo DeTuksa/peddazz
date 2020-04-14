@@ -96,7 +96,28 @@ class _NotesScreenState extends State<NotesScreen> {
               Container(
                 height: 40,
               ),
-              ...buildNoteList()
+              notesList.isEmpty ? Padding(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height*0.35
+                ),
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      'Start writing...',
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.grey.shade500
+                      ),
+                    ),
+                  ),
+                ),
+              ) : Container(
+                child: Column(
+                  children: <Widget>[
+                    ...buildNoteList()
+                  ],
+                ),
+              )
             ],
           ),
         ),
