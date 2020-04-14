@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:peddazz/colors.dart';
 import 'package:peddazz/main.dart';
 
 class PenThoughts extends StatefulWidget {
@@ -21,13 +22,14 @@ class _PenThoughtsState extends State<PenThoughts> {
     if(message.text.length > 0) {
       await firestore.collection('Feed').add({
         'text': message.text,
-        'from': MyApp.user.email,
+        'from': MyApp.user.displayName,
         'timestamp': Timestamp.now(),
+        'likes': 0,
       });
 
       message.clear();
-      scroll.animateTo(scroll.position.maxScrollExtent, curve: Curves.easeOut,
-          duration: Duration(milliseconds: 300));
+//      scroll.animateTo(scroll.position.maxScrollExtent, curve: Curves.easeOut,
+//          duration: Duration(milliseconds: 300));
     }
   }
 
@@ -47,7 +49,7 @@ class _PenThoughtsState extends State<PenThoughts> {
 
               IconButton(
 
-                  icon: Icon(Icons.close, color: Colors.deepPurpleAccent,),
+                  icon: Icon(Icons.close, color: AppColor.icon,),
                   onPressed: ()
                   {
                     Navigator.pop(context);
@@ -67,7 +69,7 @@ class _PenThoughtsState extends State<PenThoughts> {
                 child: Text(
                   'Send',
                   style: TextStyle(
-                      color: Colors.deepPurpleAccent
+                      color: AppColor.icon
                   ),
               )
             )
@@ -78,12 +80,21 @@ class _PenThoughtsState extends State<PenThoughts> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextFormField(
+              cursorColor: AppColor.icon,
               keyboardType: TextInputType.multiline,
               maxLength: 140,
               maxLines: null,
               controller: message,
               decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppColor.icon
+                  )
+                ),
                 labelText: 'Put your thoughts out there...',
+                labelStyle: TextStyle(
+                  color: AppColor.icon
+                ),
                 border: OutlineInputBorder()
               ),
             ),
