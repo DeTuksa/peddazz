@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:peddazz/home/home_drawer.dart';
 import 'package:peddazz/chats/chats.dart';
 import 'package:peddazz/feed/feed_page.dart';
+import 'package:peddazz/recording/audio_recording.dart';
+import 'package:peddazz/storage.dart';
 
 class HomeScreen extends StatefulWidget
 {
@@ -69,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen>
         });
       } else if (drawerIndex == DrawerIndex.Files) {
         setState(() {
-          screenView = null;
+          screenView = Storage();
         });
       } else if(drawerIndex == DrawerIndex.Timetable) {
         setState(() {
@@ -77,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen>
         });
       } else if(drawerIndex == DrawerIndex.Recordings) {
         setState(() {
-          screenView = null;
+          screenView = AudioRecording();
         });
       }
     }

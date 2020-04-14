@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peddazz/authentication/login.dart';
 import 'package:peddazz/authentication/signup.dart';
@@ -12,7 +13,11 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peddazz/message_handler.dart';
+//import 'package:image_picker/image_picker.dart';
+import 'package:peddazz/notes/notescreen.dart';
+import 'package:peddazz/planner/planner_home.dart';
 import 'package:peddazz/recording/audio_recording.dart';
+import 'package:peddazz/settings/help.dart';
 import 'package:peddazz/storage.dart';
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
@@ -22,6 +27,7 @@ import 'chats/users.dart';
 
 GlobalKey globalKey = new GlobalKey();
 
+final Color backgroundColor = Color(0xFF4A4A58);
 
 void main() => runApp(MyApp());
 
@@ -32,28 +38,40 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return OverlaySupport(
       child: MaterialApp(
-        title: 'PEDDAZ',
-        theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
-          primaryColorDark: Color(0x2E2633),
-
+      title: 'PEDDAZ',
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+        primaryColorDark: Color(0x2E2633),
+        fontFamily: "ZillaSlab",
+//        iconTheme: IconThemeData(
+//          color: AppColor.dark
+//        ),
+        primaryIconTheme: IconThemeData(
+          color: AppColor.dark
         ),
-        home: handleCurrentScreen(),
-        debugShowCheckedModeBanner: false,
-        routes: {
-          "login": (context) => Login(),
-          "sign_up": (context) => SignUp(),
-          "home": (context) => MyHomePage(),
-          "chatPage": (context) => ChatUsers(),
-          "chats": (context) => UsersDisplay(),
-          "feed": (context) => FeedPage(),
-          "write": (context) => PenThoughts(),
-          "settings": (context) => Settings(),
-          "audio_recording": (context) => AudioRecording(),
-          "files": (context) => Storage()
-        },
+//        accentIconTheme: IconThemeData(
+//          color: AppColor.dark
+//        )
+
       ),
-    );
+      home: handleCurrentScreen(),
+      debugShowCheckedModeBanner: false,
+      routes: {
+        "login": (context) => Login(),
+        "sign_up": (context) => SignUp(),
+        "home": (context) => MyHomePage(),
+        "chatPage": (context) => ChatUsers(),
+        "chats": (context) => UsersDisplay(),
+        "feed": (context) => FeedPage(),
+        "write": (context) => PenThoughts(),
+        "settings": (context) => Settings(),
+        "audio_recording": (context) => AudioRecording(),
+        "files": (context) => Storage(),
+        "notes":(context) => NotesScreen(),
+        "planner":(context) => PlannerHome(),
+        "help": (context) => Help()
+      },
+    ),
   }
 
   Widget handleCurrentScreen() {
@@ -121,7 +139,14 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+
+  bool isCollapsed = true;
+  final Duration duration = Duration(milliseconds: 300);
+  AnimationController controller;
+  Animation<double> scaleAnimation;
+  Animation<double> menuAnimation;
+  Animation<Offset> slideAnimation;
 
   @override
   void initState()
@@ -129,6 +154,16 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     requestAudioPermission();
     requestStoragePermission();
+    controller = AnimationController(vsync: this, duration: duration);
+    scaleAnimation = Tween<double>(begin: 1, end: 1).animate(controller);
+    menuAnimation = Tween<double>(begin: 0.5, end: 1).animate(controller);
+    slideAnimation = Tween<Offset>(begin: Offset(-1, 0), end: Offset(0, 0)).animate(controller);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   requestAudioPermission() async
@@ -147,125 +182,203 @@ class _MyHomePageState extends State<MyHomePage> {
   File profile;
   File image;
 
+
+  Widget menu(context) {
+    return SlideTransition(
+      position: slideAnimation,
+      child: ScaleTransition(
+        scale: menuAnimation,
+        child: Padding(
+          padding: const EdgeInsets.only(
+              left: 16
+          ),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.school),
+                  title: Text("Overview"),
+                  onTap: () {
+                  },
+                ),
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.clipboard),
+                  title: Text("Planner"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed("planner");
+                  },
+                ),
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.paperPlane),
+                  title: Text("Chats"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed("chats");
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.trending_up),
+                  title: Text("Feed"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed("feed");
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.folder_shared),
+                  title: Text("My Files"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed("files");
+                  },
+                ),
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.book),
+                  title: Text("Notes"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed("notes");
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.mic),
+                  title: Text("Recordings"),
+                  onTap: () {
+                    Navigator.of(context).pushNamed("audio_recording");
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('PEDDAZZ'),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: AppColor.accent
-              ),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    height: 80,
-                    width: 80,
-                    child: Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(60.0)),
-                        child: GestureDetector(
-                          onTap: () async {
-                            image = await ImagePicker.pickImage(source: ImageSource.camera);
-                            profile = image;
-                            print(image.path);
-                            if(profile == null)
-                            {
-                              print("no image");
-                            }
-                            else
-                            {
-                              print("Image selected!");
-                            }
-                            this.setState((){
+        title: Text('PEDDAZZ', style: TextStyle(color: Colors.black),),
+        centerTitle: true,
+        leading: IconButton(icon: Icon(Icons.menu), onPressed: () {
+          setState(() {
+            if(isCollapsed)
+              controller.forward();
+            else
+              controller.reverse();
 
-                            });
-                          },
-                            child: profile == null ? Icon(Icons.photo_camera) : new Image.file(image),
+            isCollapsed = !isCollapsed;
+          });
+        }),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              CupertinoIcons.settings,
+              color: AppColor.icon,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, "settings");
+            },
+          )
+        ],
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
+
+      body: Stack(
+        children: <Widget>[
+          menu(context),
+              AnimatedPositioned(
+                top: 0,
+                bottom: 0,
+                left: isCollapsed ? 0 : 0.6 * MediaQuery.of(context).size.width,
+                right: isCollapsed ? 0 : -0.4 * MediaQuery.of(context).size.width,
+                duration: duration,
+                child: ScaleTransition(
+                  scale: scaleAnimation,
+                  child: Material(
+                    elevation: isCollapsed ? 0 : 8,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      bottomLeft: Radius.circular(12)
+                    ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      physics: ClampingScrollPhysics(),
+                      child: Container(
+                        padding: EdgeInsets.only(
+                          top: 10,
+                          left: 10, right: 10
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              height: 150,
+                              child: PageView(
+                                controller: PageController(viewportFraction: 0.8),
+                                scrollDirection: Axis.horizontal,
+                                pageSnapping: true,
+                                children: <Widget>[
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        color: Colors.lightBlue.shade700,
+                                      borderRadius: BorderRadius.all(Radius.circular(24)),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(24)),
+                                      child: Image.asset(
+                                          "images/girl_planning.jpeg",
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  ),
+
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        color: Colors.limeAccent.shade700,
+                                        borderRadius: BorderRadius.all(Radius.circular(24))
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(24)),
+                                      child: Image.asset(
+                                        "images/connect.png",
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  ),
+
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        color: Colors.orangeAccent.shade700,
+                                        borderRadius: BorderRadius.all(Radius.circular(24))
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.all(Radius.circular(24)),
+                                      child: Image.asset(
+                                        "images/brainstorm.jpeg",
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Center(
-                      child: Text(MyApp.user.email, style: TextStyle(fontSize: 17, color: Colors.white),),
-                    )
-                  )
-                ],
+                ),
               ),
-            ),
-            ListTile(
-              leading: Icon(FontAwesomeIcons.university),
-              title: Text('Overview'),
-              onTap: null,
-            ),
-            ListTile(
-              leading: Icon(FontAwesomeIcons.clipboardList),
-              title: Text('Planner'),
-              onTap: null,
-            ),
-            ListTile(
-              leading: Icon(FontAwesomeIcons.paperPlane),
-              title: Text('Chats'),
-              onTap: () {
-                Navigator.of(context).popAndPushNamed("chats");
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.trending_up),
-              title: Text('Feed'),
-              onTap: ()
-              {
-                Navigator.of(context).popAndPushNamed("feed");
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.folder_shared),
-              title: Text('My Files'),
-              onTap: ()
-              {
-                Navigator.of(context).popAndPushNamed("files");
-              },
-            ),
-            ListTile(
-              leading: Icon(FontAwesomeIcons.book),
-              title: Text('Notes'),
-              onTap: null
-            ),
-            ListTile(
-              leading: Icon(Icons.mic),
-              title: Text('Recordings'),
-              onTap: ()
-                {
-                  Navigator.of(context).popAndPushNamed("audio_recording");
-                }
-            ),
-            Divider(
-              height: 33,
-            ),
-            ListTile(
-              title: Text('Settings'),
-              trailing: Icon(Icons.settings),
-              onTap: ()
-              {
-                Navigator.popAndPushNamed(context, "settings");
-              },
-            ),
-            ListTile(
-              title:Text('Sign Out'),
-              trailing: Icon(Icons.power_settings_new, color: Colors.red),
-              onTap: () {
-                  FirebaseAuth.instance.signOut();
-                },
-              ),
-          ],
-        ),
+            ],
       ),
     );
   }
