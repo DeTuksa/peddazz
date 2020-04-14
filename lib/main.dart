@@ -8,7 +8,7 @@ import 'package:peddazz/feed/writeup_page.dart';
 //import 'package:peddazz/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:overlay_support/overlay_support.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:peddazz/message_handler.dart';
@@ -30,27 +30,29 @@ class MyApp extends StatelessWidget {
   static FirebaseUser user;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'PEDDAZ',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        primaryColorDark: Color(0x2E2633),
-        
+    return OverlaySupport(
+      child: MaterialApp(
+        title: 'PEDDAZ',
+        theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+          primaryColorDark: Color(0x2E2633),
+
+        ),
+        home: handleCurrentScreen(),
+        debugShowCheckedModeBanner: false,
+        routes: {
+          "login": (context) => Login(),
+          "sign_up": (context) => SignUp(),
+          "home": (context) => MyHomePage(),
+          "chatPage": (context) => ChatUsers(),
+          "chats": (context) => UsersDisplay(),
+          "feed": (context) => FeedPage(),
+          "write": (context) => PenThoughts(),
+          "settings": (context) => Settings(),
+          "audio_recording": (context) => AudioRecording(),
+          "files": (context) => Storage()
+        },
       ),
-      home: handleCurrentScreen(),
-      debugShowCheckedModeBanner: false,
-      routes: {
-        "login": (context) => Login(),
-        "sign_up": (context) => SignUp(),
-        "home": (context) => MyHomePage(),
-        "chatPage": (context) => ChatUsers(),
-        "chats": (context) => UsersDisplay(),
-        "feed": (context) => FeedPage(),
-        "write": (context) => PenThoughts(),
-        "settings": (context) => Settings(),
-        "audio_recording": (context) => AudioRecording(),
-        "files": (context) => Storage()
-      },
     );
   }
 
