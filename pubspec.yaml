@@ -32,6 +32,7 @@ dependencies:
   path:
   audioplayers:
   firebase_messaging: ^5.0.2
+  overlay_support: ^1.0.0
   permission_handler: '^4.0.0'
   sqflite: ^1.1.5
   outline_material_icons: ^0.1.0

@@ -21,10 +21,19 @@ exports.messageNotification = functions.firestore
             .collection("tokens")
             .listDocuments();
 
-        tokensQuery.then(tokensRef=>{
+        return tokensQuery.then(tokensRef=>{
             const tokensPromise = tokensRef.map(tokenRef => {
                 return tokenRef.get();
             });
+
+            var senderEmail = change.data().from;
+            var senderFirstName ="";
+            var senderLastName = "";
+            const senderData = admin.firestore().collection('user')
+                .where("email","==",senderEmail).get().then(snap=>{
+                    senderFirstName = snap.docs[0].data().firstName;
+                    senderLastName=snap.docs[0].data().lastName;
+                });
 
             Promise.all(tokensPromise).then(val=>{
                 const tokens = [];
@@ -33,21 +42,23 @@ exports.messageNotification = functions.firestore
                 tokens.push(data["token"]);
                 }
 
-                const message = {
-                    notification: {
-                      title: change.data().from,
-                      body: change.data().text
-                    },
-                    tokens: tokens
-                  };
-
-                admin
-                .messaging()
-                .sendMulticast(message)
-                .then(val => {
-                    console.log(val.successCount);
-                    console.log(val.responses);
-                });
+                senderData.then(val=>{
+                    const message = {
+                        notification: {
+                          title: senderFirstName+" "+senderLastName,
+                          body: change.data().text
+                        },
+                        tokens: tokens
+                      };
+    
+                    admin
+                    .messaging()
+                    .sendMulticast(message)
+                    .then(val => {
+                        console.log(val.successCount);
+                        console.log(val.responses);
+                    });
+                })
 
             });
         });
