@@ -11,6 +11,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:peddazz/message_handler.dart';
 //import 'package:image_picker/image_picker.dart';
 import 'package:peddazz/notes/notescreen.dart';
 import 'package:peddazz/planner/planner_home.dart';
@@ -101,7 +103,9 @@ class MyApp extends StatelessWidget {
                   ),
                 );
               }
-              return MyHomePage();
+              return MessageHandler(
+                child: MyHomePage(),
+              );
             },
           );
         } else {

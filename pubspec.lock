@@ -28,7 +28,7 @@ packages:
       name: audio_recorder
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   audioplayers:
     dependency: "direct main"
     description:
@@ -133,6 +133,14 @@ packages:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
+    version: "0.4.0+9"
+  firebase_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_messaging
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.1.8"
     version: "0.4.3+1"
   firebase_core_platform_interface:
     dependency: transitive
@@ -267,6 +275,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
+    version: "1.4.4"
     version: "1.5.1"
   pedantic:
     dependency: transitive
@@ -457,4 +466,5 @@ packages:
     version: "3.6.1"
 sdks:
   dart: ">=2.6.0 <3.0.0"
+  flutter: ">=1.5.0 <2.0.0"
   flutter: ">=1.12.13+hotfix.4 <2.0.0"
