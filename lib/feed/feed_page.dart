@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:peddazz/colors.dart';
-//import 'package:peddazz/drawer.dart';
 import 'package:peddazz/feed/writeup_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:peddazz/main.dart';
+import 'package:peddazz/models/user_model.dart';
 import 'package:peddazz/widgets/menu.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class FeedPage extends StatefulWidget {
   @override
@@ -259,7 +257,7 @@ class _FeedState extends State<Feed> {
     List _likes = new List.from(widget.snapshot["likes"]);
     if(firstBuild==true){
       _likes.forEach((element) {
-        if(element['userId']==MyApp.user.uid){
+        if(element['userId']==Provider.of<UserModel>(context,listen: false).user.uid){
           isLiked=true;
         }
       });
@@ -367,7 +365,7 @@ class _FeedState extends State<Feed> {
                                   if(_likes!=null){
                                     int toDeleteIndex;
                                     for(int x=0;x<_likes.length;x++){
-                                      if(_likes[x]["userId"]==MyApp.user.uid){
+                                      if(_likes[x]["userId"]==Provider.of<UserModel>(context,listen: false).user.uid){
                                         toDeleteIndex=x;
                                       }
                                     }
@@ -379,10 +377,10 @@ class _FeedState extends State<Feed> {
                                 }else{
                                   if(_likes==null){
                                     _likes=new List();
-                                    _likes.add({"userId":MyApp.user.uid});
+                                    _likes.add({"userId":Provider.of<UserModel>(context,listen: false).user.uid});
                                     widget.snapshot.reference.updateData({"likes":_likes});
                                   }else{
-                                    _likes.add({"userId":MyApp.user.uid});
+                                    _likes.add({"userId":Provider.of<UserModel>(context,listen: false).user.uid});
                                     widget.snapshot.reference.updateData({"likes":_likes});
                                   }
                                 }

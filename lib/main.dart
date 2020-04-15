@@ -6,20 +6,17 @@ import 'package:peddazz/chats/chats.dart';
 import 'package:peddazz/colors.dart';
 import 'package:peddazz/feed/feed_page.dart';
 import 'package:peddazz/feed/writeup_page.dart';
-//import 'package:peddazz/home/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:peddazz/message_handler.dart';
-//import 'package:image_picker/image_picker.dart';
+import 'package:peddazz/models/user_model.dart';
 import 'package:peddazz/notes/notescreen.dart';
 import 'package:peddazz/planner/planner_home.dart';
 import 'package:peddazz/recording/audio_recording.dart';
 import 'package:peddazz/settings/help.dart';
 import 'package:peddazz/storage.dart';
 import 'dart:io';
+import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:peddazz/settings/settings.dart';
@@ -29,11 +26,18 @@ GlobalKey globalKey = new GlobalKey();
 
 final Color backgroundColor = Color(0xFF4A4A58);
 
-void main() => runApp(MyApp());
+void main() => runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserModel(),
+        )
+      ],
+      child: MyApp(),
+    ));
 
 class MyApp extends StatelessWidget {
   static String baseDirGlobal;
-  static FirebaseUser user;
+//  static FirebaseUser user;
   @override
   Widget build(BuildContext context) {
     return OverlaySupport(
@@ -73,60 +77,31 @@ class MyApp extends StatelessWidget {
   }
 
   Widget handleCurrentScreen() {
-    return StreamBuilder<FirebaseUser>(
-      stream: FirebaseAuth.instance.onAuthStateChanged,
-      builder: (context, snapshots) {
-        if (snapshots.connectionState == ConnectionState.waiting) {
-          return SplashScreen();
-        } else if (snapshots.hasData) {
-          MyApp.user = snapshots.data;
-          return StreamBuilder<DocumentSnapshot>(
-            stream: Firestore.instance
-                .collection("user")
-                .document(MyApp.user.uid)
-                .snapshots(),
-            builder: (context, snapshots) {
-              if (!snapshots.hasData) {
-                return Container(
-                  color: Colors.white,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-              if (snapshots.connectionState == ConnectionState.waiting) {
-                return Container(
-                  color: Colors.white,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-              return MessageHandler(
-                child: MyHomePage(),
-              );
-            },
-          );
-        } else {
+    return Consumer<UserModel>(
+      builder: (context, userModel, child) {
+        if (userModel.user==null) {
           return Login();
         }
+        return MessageHandler(
+          child: MyHomePage(),
+        );
       },
     );
   }
 }
 
-class SplashScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-    );
-  }
-}
+//class SplashScreen extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return Scaffold(
+//      body: Container(
+//        child: Center(
+//          child: CircularProgressIndicator(),
+//        ),
+//      ),
+//    );
+//  }
+//}
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

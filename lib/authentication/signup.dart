@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:peddazz/colors.dart';
+import 'package:peddazz/models/user_model.dart';
+import 'package:provider/provider.dart';
 import 'loading.dart';
-import 'package:peddazz/main.dart';
 import 'dart:io';
-
 
 //FIXME
 GlobalKey<CustomCircularProgressIndicatorState> indicatorKey = new GlobalKey();
@@ -59,16 +56,15 @@ class SignUpState extends State<SignUp> {
                       ),
                       child: Padding(
                         padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height*0.04,
-                            left: MediaQuery.of(context).size.width*0.08
-                        ),
+                            top: MediaQuery.of(context).size.height * 0.04,
+                            left: MediaQuery.of(context).size.width * 0.08),
                         child: Text(
                           "SIGN UP",
                           style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.height*0.026,
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.026,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white
-                          ),
+                              color: Colors.white),
                         ),
                       ),
                     ),
@@ -82,74 +78,68 @@ class SignUpState extends State<SignUp> {
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(42),
                                   topRight: Radius.circular(42)),
-                              color: Colors.white
-                          ),
+                              color: Colors.white),
                           child: ListView(
                             children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.only(
-                                  top: MediaQuery.of(context).size.height*0.13,
-                                  left: MediaQuery.of(context).size.width*0.05,
-                                  right: MediaQuery.of(context).size.width*0.05
-                                ),
+                                    top: MediaQuery.of(context).size.height *
+                                        0.13,
+                                    left: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    right: MediaQuery.of(context).size.width *
+                                        0.05),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   mainAxisSize: MainAxisSize.max,
                                   children: <Widget>[
                                     Container(
-                                      width: MediaQuery.of(context).size.width*0.28,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.28,
                                       child: TextFormField(
                                         validator: (value) {
-                                          if(value.isEmpty) {
+                                          if (value.isEmpty) {
                                             return "Empty field";
                                           }
                                           return null;
                                         },
                                         controller: firstName,
-                                        style: TextStyle(
-                                          fontSize: 18
-                                        ),
+                                        style: TextStyle(fontSize: 18),
                                         decoration: InputDecoration(
-                                          labelText: "First Name"
-                                        ),
+                                            labelText: "First Name"),
                                       ),
                                     ),
-
                                     Container(
-                                      width: MediaQuery.of(context).size.width*0.28,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.28,
                                       child: TextFormField(
                                         validator: (value) {
-                                          if(value.isEmpty) {
+                                          if (value.isEmpty) {
                                             return "Empty field";
                                           }
                                           return null;
                                         },
                                         controller: middleName,
-                                        style: TextStyle(
-                                            fontSize: 18
-                                        ),
+                                        style: TextStyle(fontSize: 18),
                                         decoration: InputDecoration(
-                                            labelText: "Middle Name"
-                                        ),
+                                            labelText: "Middle Name"),
                                       ),
                                     ),
-
                                     Container(
-                                      width: MediaQuery.of(context).size.width*0.28,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.28,
                                       child: TextFormField(
                                         validator: (value) {
-                                          if(value.isEmpty) {
+                                          if (value.isEmpty) {
                                             return "Empty field";
                                           }
                                           return null;
                                         },
                                         controller: lastName,
-                                        style: TextStyle(
-                                            fontSize: 18
-                                        ),
+                                        style: TextStyle(fontSize: 18),
                                         decoration: InputDecoration(
-                                            labelText: "Last Name"
-                                        ),
+                                            labelText: "Last Name"),
                                       ),
                                     )
                                   ],
@@ -158,41 +148,37 @@ class SignUpState extends State<SignUp> {
 
                               Padding(
                                 padding: EdgeInsets.only(
-                                  top: MediaQuery.of(context).size.height*0.03,
-                                  left: MediaQuery.of(context).size.width*0.05,
-                                  right: MediaQuery.of(context).size.width*0.05
-                                ),
+                                    top: MediaQuery.of(context).size.height *
+                                        0.03,
+                                    left: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    right: MediaQuery.of(context).size.width *
+                                        0.05),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: <Widget>[
                                     Container(
-                                      width: MediaQuery.of(context).size.width*0.5,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
                                       child: TextFormField(
                                         validator: (value) {
-                                          if(value.isEmpty) {
+                                          if (value.isEmpty) {
                                             return "Empty field";
                                           }
                                           return null;
                                         },
                                         controller: eMail,
-                                        style: TextStyle(
-                                          fontSize: 18
-                                        ),
+                                        style: TextStyle(fontSize: 18),
                                         decoration: InputDecoration(
-                                          hintText: "example.example",
-                                          hintStyle: TextStyle(
-                                            color: Colors.grey
-                                          )
-                                        ),
+                                            hintText: "example.example",
+                                            hintStyle:
+                                                TextStyle(color: Colors.grey)),
                                       ),
                                     ),
-
                                     Text(
                                       "@st.futminna.edu.ng",
                                       style: TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.grey
-                                      ),
+                                          fontSize: 17, color: Colors.grey),
                                     )
                                   ],
                                 ),
@@ -249,72 +235,94 @@ class SignUpState extends State<SignUp> {
 
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height*0.03,
-                                    left: MediaQuery.of(context).size.width*0.05,
-                                    right: MediaQuery.of(context).size.width*0.05
-                                ),
+                                    top: MediaQuery.of(context).size.height *
+                                        0.03,
+                                    left: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    right: MediaQuery.of(context).size.width *
+                                        0.05),
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width*0.8,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
                                   child: TextFormField(
                                     controller: passWord,
                                     validator: (value) {
-                                      if(value.isEmpty) {
+                                      if (value.isEmpty) {
                                         return "Empty field";
                                       }
                                       return null;
                                     },
                                     style: TextStyle(fontSize: 18),
-                                    decoration: InputDecoration(
-                                        labelText: "Password"
-                                    ),
+                                    decoration:
+                                        InputDecoration(labelText: "Password"),
                                   ),
                                 ),
                               ),
 
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height*0.07,
-                                    left: MediaQuery.of(context).size.width*0.05,
-                                    right: MediaQuery.of(context).size.width*0.05
-                                ),
-
+                                    top: MediaQuery.of(context).size.height *
+                                        0.07,
+                                    left: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    right: MediaQuery.of(context).size.width *
+                                        0.05),
                                 child: Center(
                                   child: RaisedButton(
                                     color: AppColor.primary,
                                     onPressed: () async {
-                                      FocusScope.of(context).requestFocus(new FocusNode());
-                                      if(formKey.currentState.validate()) {
-                                        bool isSuccessful = await signUpWithEmail();
+                                      FocusScope.of(context)
+                                          .requestFocus(new FocusNode());
+                                      changeLoadingVisible();
+                                      if (formKey.currentState.validate()) {
+                                        bool isSuccessful =
+                                            await Provider.of<UserModel>(
+                                                    context,listen: false)
+                                                .signUp(
+                                                    eMail.text.trim() +
+                                                        "@st.futminna.edu.ng",
+                                                    passWord.text.trim(),
+                                                    firstName.text.trim(),
+                                                    lastName.text.trim(),
+                                                    middleName.text.trim());
                                         if (isSuccessful == true) {
                                           Navigator.pop(context);
+                                        }else{
+                                          changeLoadingVisible();
                                         }
+                                      }else{
+                                        changeLoadingVisible();
                                       }
                                     },
                                     child: Text(
-                                        "Sign up",
+                                      "Sign up",
                                       style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.white
-                                      ),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white),
                                     ),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(100)
-                                    ),
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
                                     padding: EdgeInsets.symmetric(
-                                      horizontal: MediaQuery.of(context).size.width*0.06,
-                                      vertical: MediaQuery.of(context).size.width*0.03
-                                    ),
+                                        horizontal:
+                                            MediaQuery.of(context).size.width *
+                                                0.06,
+                                        vertical:
+                                            MediaQuery.of(context).size.width *
+                                                0.03),
                                   ),
                                 ),
                               ),
 
                               Padding(
                                 padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height*0.05,
-                                    left: MediaQuery.of(context).size.width*0.05,
-                                    right: MediaQuery.of(context).size.width*0.05
-                                ),
+                                    top: MediaQuery.of(context).size.height *
+                                        0.05,
+                                    left: MediaQuery.of(context).size.width *
+                                        0.05,
+                                    right: MediaQuery.of(context).size.width *
+                                        0.05),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -326,9 +334,8 @@ class SignUpState extends State<SignUp> {
                                       },
                                       child: Text(
                                         " Login",
-                                        style: TextStyle(
-                                          color: AppColor.primary
-                                        ),
+                                        style:
+                                            TextStyle(color: AppColor.primary),
                                       ),
                                     )
                                   ],
@@ -354,82 +361,6 @@ class SignUpState extends State<SignUp> {
     setState(() {
       loadingVisible = !loadingVisible;
     });
-  }
-
-  Future<bool> signUpWithEmail() async {
-    bool signUpSuccessful = false;
-    try {
-      await changeLoadingVisible();
-      MyApp.user = null;
-      MyApp.user = (await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: eMail.text.trim() + '@st.futminna.edu.ng',
-        password: passWord.text.trim(),
-      ))
-          .user;
-      MyApp.user = await FirebaseAuth.instance.currentUser();
-      UserUpdateInfo updateInfo = UserUpdateInfo();
-      updateInfo.displayName = lastName.text.trim() + ' ' + firstName.text.trim();
-      await MyApp.user.updateProfile(updateInfo);
-      await MyApp.user.reload();
-      MyApp.user = await FirebaseAuth.instance.currentUser();
-      print('UserName is ${MyApp.user.displayName}');
-    } catch (e) {
-      print(e.toString());
-    } finally {
-      if (MyApp.user != null) {
-        signUpSuccessful = true;
-        Record record = new Record(
-            userID: MyApp.user.uid,
-            firstName: firstName.text,
-            middleName: middleName.text,
-            lastName: lastName.text,
-            email: eMail.text.trim() + "@st.futminna.edu.ng");
-
-        try {
-          Firestore.instance.runTransaction((Transaction transaction) async {
-            await Firestore.instance
-                .collection("user")
-                .document(record.userID)
-                .setData(record.toJson());
-          });
-
-          await MyApp.user.sendEmailVerification();
-        } catch (e) {}
-        //i would send a verification email here
-        // and take the user to the login page
-      } else {
-        await changeLoadingVisible();
-        indicatorKey.currentState.setState(() {
-          indicatorKey.currentState.opacity = 0;
-        });
-      }
-    }
-    return signUpSuccessful;
-  }
-}
-
-class Record {
-  String userID;
-  String firstName;
-  String lastName;
-  String email;
-  String middleName;
-
-  Record(
-      {this.userID,
-      this.middleName,
-      this.lastName,
-      this.firstName,
-      this.email});
-
-  Map<String, dynamic> toJson() {
-    return {
-      "userID": userID,
-      "firstName": firstName,
-      "lastName": lastName,
-      "email": email,
-      "middleName": middleName,
-    };
   }
 }
 

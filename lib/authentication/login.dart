@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peddazz/colors.dart';
-import 'package:peddazz/main.dart';
 import 'package:peddazz/authentication/signup.dart';
 import 'package:peddazz/authentication/loading.dart';
+import 'package:peddazz/models/user_model.dart';
 import 'dart:io';
 
-GlobalKey<CustomCircularProgressIndicatorState> indicatorKey = new GlobalKey();
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   Login({Key key, this.title}) : super(key: key);
@@ -21,18 +20,9 @@ class Login extends StatefulWidget {
 class LoginPage extends State<Login> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<FirebaseUser>(
-        stream: FirebaseAuth.instance.onAuthStateChanged,
-        builder: (context, snapshots) {
-          if (snapshots.hasData) {
-            MyApp.user = snapshots.data;
-            return Container();
-          } else {
-            return Scaffold(
-              body: LoginBody(),
-            );
-          }
-        });
+    return Scaffold(
+      body: LoginBody(),
+    );
   }
 }
 
@@ -205,7 +195,11 @@ class LoginBodyState extends State<LoginBody> {
                                       activeConnection = false;
                                     }
                                     if(activeConnection == true) {
-                                      signInWithEmail();
+                                      await _changeLoadingVisible();
+                                      bool successful = await Provider.of<UserModel>(context,listen: false).signInWithEmail(email: eMail.text.trim(),password: passWord.text.trim());
+                                      if(successful==false){
+                                        await _changeLoadingVisible();
+                                      }
                                     } else {
                                       Scaffold.of(context).showSnackBar(SnackBar(content: Text("No internet connection")));
                                     }
@@ -268,29 +262,5 @@ class LoginBodyState extends State<LoginBody> {
     setState(() {
       loadingVisible = !loadingVisible;
     });
-  }
-
-  void signInWithEmail() async {
-    try {
-      await _changeLoadingVisible();
-      MyApp.user = null;
-      MyApp.user = (await FirebaseAuth.instance.signInWithEmailAndPassword(
-              email: eMail.text.trim(), password: passWord.text.trim()))
-          .user;
-    } catch (e) {
-      print(e.toString());
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("username or password incorrect"),
-      ));
-    } finally {
-      if (MyApp.user == null) {
-        await _changeLoadingVisible();
-        indicatorKey.currentState.setState(() {
-          indicatorKey.currentState.opacity = 0;
-        });
-      }
-      //Scaffold.of(context)
-      //  .showSnackBar(SnackBar(content: Text("error logging you in")));
-    }
   }
 }

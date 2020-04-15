@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peddazz/colors.dart';
-import 'package:peddazz/main.dart';
+import 'package:peddazz/models/user_model.dart';
+import 'package:provider/provider.dart';
 
 class PenThoughts extends StatefulWidget {
   @override
@@ -17,24 +18,25 @@ class _PenThoughtsState extends State<PenThoughts> {
   TextEditingController message = TextEditingController();
   ScrollController scroll = ScrollController();
 
-  Future <void> callBack() async
-  {
-    if(message.text.length > 0) {
-      await firestore.collection('Feed').add({
-        'text': message.text,
-        'from': MyApp.user.displayName,
-        'timestamp': Timestamp.now(),
-        'likes': [],
-      });
-
-      message.clear();
-//      scroll.animateTo(scroll.position.maxScrollExtent, curve: Curves.easeOut,
-//          duration: Duration(milliseconds: 300));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+
+    Future <void> callBack() async
+    {
+      if(message.text.length > 0) {
+        await firestore.collection('Feed').add({
+          'text': message.text,
+          'from': Provider.of<UserModel>(context,listen: false).userData.firstName+" "+Provider.of<UserModel>(context,listen: false).userData.lastName,
+          'timestamp': Timestamp.now(),
+          'likes': [],
+        });
+
+        message.clear();
+//      scroll.animateTo(scroll.position.maxScrollExtent, curve: Curves.easeOut,
+//          duration: Duration(milliseconds: 300));
+      }
+    }
+
     return Material(
 
       child: Scaffold(
