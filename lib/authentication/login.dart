@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peddazz/colors.dart';
-import 'package:peddazz/authentication/signup.dart';
 import 'package:peddazz/authentication/loading.dart';
 import 'package:peddazz/models/user_model.dart';
 import 'dart:io';

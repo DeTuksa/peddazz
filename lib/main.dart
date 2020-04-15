@@ -9,6 +9,7 @@ import 'package:peddazz/feed/writeup_page.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:peddazz/message_handler.dart';
+import 'package:peddazz/models/feed_model.dart';
 import 'package:peddazz/models/user_model.dart';
 import 'package:peddazz/notes/notescreen.dart';
 import 'package:peddazz/planner/planner_home.dart';
@@ -30,6 +31,9 @@ void main() => runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => UserModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FeedModel(),
         )
       ],
       child: MyApp(),

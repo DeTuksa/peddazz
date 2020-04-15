@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:peddazz/colors.dart';
-import 'package:peddazz/models/user_model.dart';
 import 'package:provider/provider.dart';
+import 'package:peddazz/models/feed_model.dart';
 
 class PenThoughts extends StatefulWidget {
   @override
@@ -11,32 +9,10 @@ class PenThoughts extends StatefulWidget {
 }
 
 class _PenThoughtsState extends State<PenThoughts> {
-
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  Firestore firestore = Firestore.instance;
-
   TextEditingController message = TextEditingController();
-  ScrollController scroll = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-
-    Future <void> callBack() async
-    {
-      if(message.text.length > 0) {
-        await firestore.collection('Feed').add({
-          'text': message.text,
-          'from': Provider.of<UserModel>(context,listen: false).userData.firstName+" "+Provider.of<UserModel>(context,listen: false).userData.lastName,
-          'timestamp': Timestamp.now(),
-          'likes': [],
-        });
-
-        message.clear();
-//      scroll.animateTo(scroll.position.maxScrollExtent, curve: Curves.easeOut,
-//          duration: Duration(milliseconds: 300));
-      }
-    }
-
     return Material(
 
       child: Scaffold(
@@ -64,7 +40,9 @@ class _PenThoughtsState extends State<PenThoughts> {
             FlatButton(
                 onPressed: ()
                 {
-                  callBack();
+                  Provider.of<FeedModel>(context,listen: false).postFeed(message.text, context).then((value){
+                    message.clear();
+                  });
                   Navigator.pop(context);
                 },
 
@@ -102,84 +80,6 @@ class _PenThoughtsState extends State<PenThoughts> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class Tweet extends StatelessWidget {
-  final String username;
-  final String handle;
-  final String text;
-  final Timestamp timestamp;
-
-  const Tweet({Key key, this.handle, this.username, this.text, this.timestamp}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Flexible(
-            fit: FlexFit.loose,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(bottom: 3),
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 5),
-                      child: Text(
-                        'Tuksa',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: Text(
-                      '@dt_emmy',
-                      style: TextStyle(
-                        color: Colors.grey[500],
-                      ),
-                    ),
-                  ),
-                  Text(
-                    '5h ago',
-                    style: TextStyle(
-                      color: Colors.grey[500],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Flexible(
-            fit: FlexFit.loose,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: Text(
-                  text
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              IconButton(icon: Icon(Icons.reply, size: 20,), onPressed: null),
-              IconButton(icon: Icon(Icons.repeat, size: 20), onPressed: null),
-              IconButton(icon: Icon(Icons.favorite_border, size: 20), onPressed: null),
-            ],
-          ),
-          Divider()
-        ],
       ),
     );
   }

@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class UserModel extends ChangeNotifier{
   FirebaseUser user;
   UserData userData;
-
   //stream subscription to monitor authentication states
   StreamSubscription authState;
 
