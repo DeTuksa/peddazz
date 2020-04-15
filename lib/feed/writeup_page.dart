@@ -24,7 +24,7 @@ class _PenThoughtsState extends State<PenThoughts> {
         'text': message.text,
         'from': MyApp.user.displayName,
         'timestamp': Timestamp.now(),
-        'likes': 0,
+        'likes': [],
       });
 
       message.clear();

@@ -250,13 +250,21 @@ class Feed extends StatefulWidget{
 class _FeedState extends State<Feed> {
 
   bool isLiked = false;
+  bool firstBuild = true;
 
   @override
   Widget build(BuildContext context){
     //widget.snapshot.reference.updateData({'${MyApp.user.displayName}': false});
     Timestamp timestamp = widget.snapshot["timestamp"];
-    int _likes = widget.snapshot["likes"];
-    var userLike = widget.snapshot['${MyApp.user.displayName}'];
+    List _likes = new List.from(widget.snapshot["likes"]);
+    if(firstBuild==true){
+      _likes.forEach((element) {
+        if(element['userId']==MyApp.user.uid){
+          isLiked=true;
+        }
+      });
+      firstBuild=false;
+    }
     Duration duration= Timestamp.now().toDate().difference(timestamp.toDate());
 
     return InkWell(
@@ -352,43 +360,46 @@ class _FeedState extends State<Feed> {
                             InkWell(
                               borderRadius: BorderRadius.all(Radius.circular(12)),//FIXME
                               onTap: () async {
-                                widget.snapshot.reference.updateData({'${MyApp.user.displayName}': 0});
-                                print(userLike);
-                                print('${MyApp.user.displayName}');
-                                print('${widget.snapshot['${MyApp.user.displayName}']}');
-                                print('${widget.snapshot['isLiked']}');
-                                //print('${widget.snapshot.reference.firestore.collection('List of likes').document('${MyApp.user.email}').get()}');
                                 setState(() {
-                                  if (userLike != 1) {
-                                    widget.snapshot.reference.updateData({'${MyApp.user.displayName}': 1});
-                                    //widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').updateData({'isLiked': true});
-                                    widget.snapshot.reference.updateData({'likes': FieldValue.increment(1)});
-                                    widget.snapshot.reference.updateData({'isLiked': true});
-                                  }
-                                  else {
-                                    widget.snapshot.reference.updateData({'${MyApp.user.displayName}': 0});
-                                    widget.snapshot.reference.updateData({'likes': FieldValue.increment(-1)});
-                                    //widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').updateData({'isliked': false});
-                                    //widget.snapshot.reference.collection('List of likes').document('${MyApp.user.email}').delete();
-                                    widget.snapshot.reference.updateData({'isLiked': false});
-                                  }
+                                  isLiked=!isLiked;
                                 });
+                                if(isLiked==false){
+                                  if(_likes!=null){
+                                    int toDeleteIndex;
+                                    for(int x=0;x<_likes.length;x++){
+                                      if(_likes[x]["userId"]==MyApp.user.uid){
+                                        toDeleteIndex=x;
+                                      }
+                                    }
+                                    if(_likes.length>0) {
+                                      _likes.removeAt(toDeleteIndex);
+                                      widget.snapshot.reference.updateData({"likes":_likes});
+                                    }
+                                  }
+                                }else{
+                                  if(_likes==null){
+                                    _likes=new List();
+                                    _likes.add({"userId":MyApp.user.uid});
+                                    widget.snapshot.reference.updateData({"likes":_likes});
+                                  }else{
+                                    _likes.add({"userId":MyApp.user.uid});
+                                    widget.snapshot.reference.updateData({"likes":_likes});
+                                  }
+                                }
+                                print(isLiked);
                               },
-                              child: _likes ==0 ? Icon(
+                              child: isLiked==false ? Icon(
                                 Icons.star_border,
                                 color: Colors.deepOrange,
                                 size: 22,
-                              ) : widget.snapshot['${MyApp.user.displayName}'] == 1 ? Icon(
-                                  Icons.star,
-                                  color: Colors.deepOrange,
-                                size: 22,
-                                ) : Icon(
-                                Icons.star_border,
+                              ) : Icon(
+                                Icons.star,
                                 color: Colors.deepOrange,
+                                size: 22,
                               ),
                             ),
                             SizedBox(height: 1,),
-                            _likes == 0 ? Text("") : Text("$_likes")
+                            _likes == null ? Text("") : Text("${_likes.length}")
                           ],
                         ),
 
