@@ -1,7 +1,8 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:peddazz/colors.dart';
-import 'package:peddazz/main.dart';
+import 'package:peddazz/models/user_model.dart';
+import 'package:provider/provider.dart';
 
 Drawer globalDrawer(
     context
@@ -33,7 +34,7 @@ Drawer globalDrawer(
               Padding(
                   padding: EdgeInsets.only(top: 10),
                   child: Center(
-                    child: Text(MyApp.user.email, style: TextStyle(fontSize: 17, color: Colors.white),),
+                    child: Text(Provider.of<UserModel>(context,listen: false).userData.email, style: TextStyle(fontSize: 17, color: Colors.white),),
                   )
               )
             ],

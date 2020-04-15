@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peddazz/colors.dart';
-import 'package:peddazz/main.dart';
+import 'package:peddazz/models/user_model.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class Settings extends StatefulWidget {
@@ -86,7 +87,7 @@ class _SettingsState extends State<Settings> {
                       children: <Widget>[
 
                         Text(
-                          "${MyApp.user.displayName}",
+                          "${Provider.of<UserModel>(context,listen: false).userData.firstName} ${Provider.of<UserModel>(context,listen: false).userData.lastName}",
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500
@@ -96,7 +97,7 @@ class _SettingsState extends State<Settings> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 5),
                           child: Text(
-                            MyApp.user.email,
+                            Provider.of<UserModel>(context,listen: false).userData.email,
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey
@@ -318,7 +319,10 @@ class _SettingsState extends State<Settings> {
             FlatButton(
               child: Text('YES'),
               onPressed: () {
-                FirebaseAuth.instance.signOut();
+                FirebaseAuth.instance.signOut().then((value){
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                });
               },
             )
           ],

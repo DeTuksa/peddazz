@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:peddazz/chats/message.dart';
 import 'package:peddazz/colors.dart';
-import 'package:peddazz/main.dart';
+import 'package:peddazz/models/user_model.dart';
+import 'package:provider/provider.dart';
 
 class ChatUsers extends StatefulWidget {
   static const String id = 'Chat';
@@ -22,52 +23,6 @@ class ChatUsersState extends State<ChatUsers> {
   TextEditingController message = TextEditingController();
   ScrollController scroll = ScrollController();
 
-  Future<void> callBack() async {
-    print(MyApp.user.email);
-    if (message.text.length > 0) {
-      String _message = message.text;
-      message.clear();
-      final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-      String receiverID = arguments['id'];
-      await firestore
-          .collection('user')
-          .document(receiverID)
-          .collection("messages")
-          .add({
-        'text': _message,
-        'from': MyApp.user.email,
-        'timestamp': Timestamp.now()
-      });
-      scroll.animateTo(scroll.position.minScrollExtent,
-          curve: Curves.easeOut, duration: Duration(milliseconds: 300));
-    }
-  }
-
-  List<Widget> buildMessageWidgets() {
-    List<DocumentSnapshot> messages = [];
-    for (int x = 0; x < receiverMessages.length; x++) {
-      messages.add(receiverMessages[x]);
-    }
-    for (int x = 0; x < senderMessages.length; x++) {
-      messages.add(senderMessages[x]);
-    }
-    messages.sort((snap1, snap2) {
-      Timestamp stamp1 = snap1["timestamp"];
-      Timestamp stamp2 = snap2["timestamp"];
-      return stamp2.compareTo(stamp1);
-    });
-
-    List<Widget> messagesWidget = messages
-        .map((doc) => Message(
-              from: doc.data['from'],
-              text: doc.data['text'],
-              person: MyApp.user.email == doc.data['from'],
-            ))
-        .toList();
-
-    return messagesWidget;
-  }
-
   List<DocumentSnapshot> receiverMessages = [];
   List<DocumentSnapshot> senderMessages = [];
   StreamSubscription receiverSub;
@@ -84,6 +39,53 @@ class ChatUsersState extends State<ChatUsers> {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> callBack() async {
+      if (message.text.length > 0) {
+        String _message = message.text;
+        message.clear();
+        final Map arguments = ModalRoute.of(context).settings.arguments as Map;
+        String receiverID = arguments['id'];
+        await firestore
+            .collection('user')
+            .document(receiverID)
+            .collection("messages")
+            .add({
+          'text': _message,
+          'from': Provider.of<UserModel>(context,listen: false).userData.email,
+          'timestamp': Timestamp.now()
+        });
+        scroll.animateTo(scroll.position.minScrollExtent,
+            curve: Curves.easeOut, duration: Duration(milliseconds: 300));
+      }
+    }
+
+    List<Widget> buildMessageWidgets() {
+      List<DocumentSnapshot> messages = [];
+      for (int x = 0; x < receiverMessages.length; x++) {
+        messages.add(receiverMessages[x]);
+      }
+      for (int x = 0; x < senderMessages.length; x++) {
+        messages.add(senderMessages[x]);
+      }
+      messages.sort((snap1, snap2) {
+        Timestamp stamp1 = snap1["timestamp"];
+        Timestamp stamp2 = snap2["timestamp"];
+        return stamp2.compareTo(stamp1);
+      });
+
+      List<Widget> messagesWidget = messages
+          .map((doc) => Message(
+        from: doc.data['from'],
+        text: doc.data['text'],
+        person: Provider.of<UserModel>(context,listen: false).userData.email == doc.data['from'],
+      ))
+          .toList();
+
+      return messagesWidget;
+    }
+
+
+
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
     String displayName = arguments['lastname'] + ' ' + arguments['firstname'];
     if (buildCount == 0) {
@@ -102,7 +104,7 @@ class ChatUsersState extends State<ChatUsers> {
             .collection("user")
             .document(receiverID)
             .collection("messages")
-            .where("from", isEqualTo: MyApp.user.email)
+            .where("from", isEqualTo: Provider.of<UserModel>(context,listen: false).userData.email)
             .snapshots()
             .listen((snap) {
           setState(() {
@@ -112,7 +114,7 @@ class ChatUsersState extends State<ChatUsers> {
 
         senderSub=firestore
             .collection("user")
-            .document(MyApp.user.uid)
+            .document(Provider.of<UserModel>(context,listen: false).user.uid)
             .collection("messages")
             .where("from", isEqualTo: receiversEmail)
             .snapshots()

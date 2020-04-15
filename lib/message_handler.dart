@@ -4,6 +4,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:peddazz/main.dart';
 import 'dart:io';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:peddazz/models/user_model.dart';
+import 'package:provider/provider.dart';
 
 String fcmToken;
 
@@ -51,7 +53,7 @@ class MessageHandlerState extends State<MessageHandler> {
       if (fcmToken != null) {
         var tokenRef = Firestore.instance
             .collection("user")
-            .document(MyApp.user.uid)
+            .document(Provider.of<UserModel>(context,listen: false).user.uid)
             .collection("tokens")
             .document(fcmToken);
 

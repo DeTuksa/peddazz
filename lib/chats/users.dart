@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:peddazz/colors.dart';
 import 'package:peddazz/drawer.dart';
-import 'package:peddazz/main.dart';
+import 'package:peddazz/models/user_model.dart';
+import 'package:provider/provider.dart';
 
 class UsersDisplay extends StatefulWidget {
   @override
@@ -66,7 +67,7 @@ class UsersDisplayState extends State<UsersDisplay> {
                         String email = usersSnapshot.data.documents[count]["email"]
                             .toString()
                             .trim();
-                        if (email == MyApp.user.email) {
+                        if (email == Provider.of<UserModel>(context).userData.email) {
                           return Container();
                         }
                         return ListTile(
