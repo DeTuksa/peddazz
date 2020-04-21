@@ -12,13 +12,15 @@ import 'package:peddazz/message_handler.dart';
 import 'package:peddazz/models/feed_model.dart';
 import 'package:peddazz/models/user_model.dart';
 import 'package:peddazz/notes/notescreen.dart';
-import 'package:peddazz/planner/planner_home.dart';
+import 'package:peddazz/planner/planner.dart';
+//import 'package:peddazz/planner/planner_home.dart';
 import 'package:peddazz/recording/audio_recording.dart';
 import 'package:peddazz/settings/help.dart';
 import 'package:peddazz/storage.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:syncfusion_flutter_core/core.dart';
 
 import 'package:peddazz/settings/settings.dart';
 import 'chats/users.dart';
@@ -27,7 +29,9 @@ GlobalKey globalKey = new GlobalKey();
 
 final Color backgroundColor = Color(0xFF4A4A58);
 
-void main() => runApp(MultiProvider(
+void main() {
+  SyncfusionLicense.registerLicense(null);
+  return runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (context) => UserModel(),
@@ -38,6 +42,7 @@ void main() => runApp(MultiProvider(
       ],
       child: MyApp(),
     ));
+}
 
 class MyApp extends StatelessWidget {
   static String baseDirGlobal;
@@ -48,7 +53,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'PEDDAZ',
         theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
+          primarySwatch: Colors.blueGrey,
           primaryColorDark: Color(0x2E2633),
           fontFamily: "ZillaSlab",
 //        iconTheme: IconThemeData(
@@ -73,7 +78,7 @@ class MyApp extends StatelessWidget {
           "audio_recording": (context) => AudioRecording(),
           "files": (context) => Storage(),
           "notes": (context) => NotesScreen(),
-          "planner": (context) => PlannerHome(),
+          "planner": (context) => Planner(),
           "help": (context) => Help()
         },
       ),

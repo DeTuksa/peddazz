@@ -147,7 +147,7 @@ class _FeedTileState extends State<FeedTile> {
                             ),
                           ),
                           SizedBox(height: 1,),
-                          _likes == null ? Text("") : Text("${_likes.length}")
+                          _likes == null ? Text("") : _likes.length == 0 ? Text("") : Text("${_likes.length}")
                         ],
                       ),
 
