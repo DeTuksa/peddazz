@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:intl/intl.dart';
 import 'edit_note.dart';
 import 'database.dart';
@@ -50,7 +49,7 @@ class _ViewNotePageState extends State<ViewNotePage> {
                   curve: Curves.easeIn,
                   child: Text(
                     widget.currentNote.title,
-                    style: prefix0.TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 36,
                     ),
@@ -81,7 +80,7 @@ class _ViewNotePageState extends State<ViewNotePage> {
                 ),
                 child: Text(
                   widget.currentNote.content,
-                  style: prefix0.TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 18
                   ),
@@ -160,7 +159,7 @@ class _ViewNotePageState extends State<ViewNotePage> {
                 },
                 child: Text(
                   'DELETE',
-                  style: prefix0.TextStyle(
+                  style: TextStyle(
                       fontWeight: FontWeight.w500,
                       letterSpacing: 1
                   ),
@@ -173,7 +172,7 @@ class _ViewNotePageState extends State<ViewNotePage> {
                 },
                 child: Text(
                   'CANCEL',
-                  style: prefix0.TextStyle(
+                  style: TextStyle(
                       fontWeight: FontWeight.w500,
                       letterSpacing: 1
                   ),

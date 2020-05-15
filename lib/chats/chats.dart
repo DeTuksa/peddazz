@@ -2,9 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:peddazz/chats/call/video_call.dart';
+import 'package:peddazz/chats/call/voice_call.dart';
 import 'package:peddazz/chats/message.dart';
 import 'package:peddazz/colors.dart';
 import 'package:peddazz/models/user_model.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class ChatUsers extends StatefulWidget {
@@ -17,6 +20,11 @@ class ChatUsers extends StatefulWidget {
 }
 
 class ChatUsersState extends State<ChatUsers> {
+
+  final channelController = TextEditingController();
+  bool validateError = false;
+  bool voice = false;
+
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Firestore firestore = Firestore.instance;
 
@@ -181,7 +189,27 @@ class ChatUsersState extends State<ChatUsers> {
                           Icons.call,
                           color: Colors.white60,
                         ),
-                        onPressed: null,
+                        onPressed: () {
+                          setState(() {
+                            voice = true;
+                          });
+                          channelController.clear();
+                          channelDialog();
+                        },
+                      ),
+
+                      IconButton(
+                        icon: Icon(
+                          Icons.videocam,
+                          color: Colors.white60,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            voice = false;
+                          });
+                          channelController.clear();
+                          channelDialog();
+                        },
                       ),
 
                       IconButton(
@@ -268,7 +296,93 @@ class ChatUsersState extends State<ChatUsers> {
       ),
     );
   }
+
+  Future<void> channelDialog() async {
+    return showDialog<void> (
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Channel Name'
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextFormField(
+                  controller: channelController,
+                  decoration: InputDecoration(
+                    errorText: validateError ? 'Channel name is Empty' : null
+                  ),
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('ABORT'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('CALL'),
+              onPressed: voice ?
+              () async {
+                Navigator.pop(context);
+                onVoiceCall();
+              }: () async {
+                Navigator.pop(context);
+                onVideoCall();
+              },
+            )
+          ],
+        );
+      }
+    );
+  }
+
+  Future<void> onVideoCall() async {
+    setState(() {
+      channelController.text.isEmpty ?
+          validateError = true
+          : validateError = false;
+    });
+    if (channelController.text.isNotEmpty) {
+      await handleCameraAndMic();
+      await Navigator.push(context,
+      MaterialPageRoute(
+        builder: (context) => VideoCallScreen(
+          channelName: channelController.text.trim(),
+        )
+      ));
+    }
+  }
+
+  Future<void> onVoiceCall() async {
+    setState(() {
+      channelController.text.isEmpty ?
+      validateError = true
+          : validateError = false;
+    });
+    if (channelController.text.isNotEmpty) {
+      await handleCameraAndMic();
+      await Navigator.push(context,
+          MaterialPageRoute(
+              builder: (context) => VoiceCallScreen(
+                channelName: channelController.text.trim(),
+              )
+          ));
+    }
+  }
+
+  Future<void> handleCameraAndMic() async {
+    await PermissionHandler().requestPermissions(
+      [PermissionGroup.camera, PermissionGroup.microphone]
+    );
+  }
 }
+
 
 //class SendButton extends StatelessWidget
 //{
