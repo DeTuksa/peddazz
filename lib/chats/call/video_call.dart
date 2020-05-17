@@ -1,20 +1,32 @@
 import 'dart:async';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:peddazz/chats/call/settings.dart';
 import 'package:peddazz/colors.dart';
+import 'package:peddazz/models/user_model.dart';
+import 'package:provider/provider.dart';
+import 'call.dart';
 
 class VideoCallScreen extends StatefulWidget {
 
-  final String channelName;
+  final Call call;
 
-  const VideoCallScreen({Key key, this.channelName}) : super(key: key);
+
+  const VideoCallScreen({Key key, this.call}) : super(key: key);
 
   @override
   _VideoCallScreenState createState() => _VideoCallScreenState();
 }
 
 class _VideoCallScreenState extends State<VideoCallScreen> {
+
+  final Call call = Call();
+  final CallMethods callMethods = CallMethods();
+
+  UserModel userModel;
+  StreamSubscription callStreamSubscription;
 
   static final users = <int>[];
   final infoStrings = <String>[];
@@ -23,6 +35,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   @override
   void initState() {
     super.initState();
+    addPostFrameCallback();
     initialize();
   }
 
@@ -38,7 +51,26 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     await AgoraRtcEngine.enableWebSdkInteroperability(true);
     await AgoraRtcEngine.setParameters(
         '''{\"che.video.lowBitRateStreamParameter\":{\"width\":320,\"height\":180,\"frameRate\":15,\"bitRate\":140}}''');
-    await AgoraRtcEngine.joinChannel(null, widget.channelName, null, 0);
+    await AgoraRtcEngine.joinChannel(null, widget.call.channelId, null, 0);
+  }
+
+  addPostFrameCallback() {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      Provider.of<UserModel>(context, listen: false);
+
+      callStreamSubscription = callMethods.callStream(
+        uid: '${Provider.of<UserModel>(context, listen: false).userData.userId}'
+      ).listen((DocumentSnapshot ds) {
+        switch(ds.data) {
+          case null:
+            Navigator.pop(context);
+            break;
+
+          default:
+            break;
+        }
+      });
+    });
   }
 
   Future<void> initAgoraRtcEngine() async {
@@ -179,7 +211,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             padding: const EdgeInsets.all(12.0),
           ),
           RawMaterialButton(
-            onPressed: () => _onCallEnd(context),
+            onPressed: () async {
+              _onCallEnd(context);
+              //await callMethods.endCall(call: w);
+              //Navigator.pop(context);
+            },
             child: Icon(
               Icons.call_end,
               color: Colors.white,
@@ -256,7 +292,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
   }
 
-  void _onCallEnd(BuildContext context) {
+  void _onCallEnd(BuildContext context) async {
+    await callMethods.endCall(call: widget.call);
     Navigator.pop(context);
   }
 
@@ -276,6 +313,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     users.clear();
     AgoraRtcEngine.leaveChannel();
     AgoraRtcEngine.destroy();
+    callStreamSubscription.cancel();
     super.dispose();
   }
 
@@ -293,5 +331,40 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         ),
       ),
     );
+  }
+}
+
+class CallMethods {
+  final CollectionReference callCollection = Firestore.instance.collection('call');
+  Stream<DocumentSnapshot> callStream({String uid}) =>
+      callCollection.document(uid).snapshots();
+
+  Future<bool> makeVideoCall({Call call}) async {
+    try {
+      call.hasDialled = true;
+      call.isCall = 'video';
+      Map<String, dynamic> hasDialledMap = call.toMap(call);
+      call.hasDialled = false;
+      call.isCall = 'video';
+      Map<String, dynamic> hasNotDialledMap = call.toMap(call);
+
+      await callCollection.document(call.callerId).setData(hasDialledMap);
+      await callCollection.document(call.receiverId).setData(hasNotDialledMap);
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> endCall({Call call}) async {
+    try {
+      await callCollection.document(call.callerId).delete();
+      await callCollection.document(call.receiverId).delete();
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 }

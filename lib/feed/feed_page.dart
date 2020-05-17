@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:peddazz/chats/call/pickup_layout.dart';
 import 'package:peddazz/colors.dart';
 import 'package:peddazz/feed/writeup_page.dart';
 import 'package:peddazz/models/feed_model.dart';
@@ -48,120 +49,122 @@ class _FeedPageState extends State<FeedPage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PickupLayout(
+      scaffold: Scaffold(
 
-      appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.menu), onPressed: () {
-          setState(() {
-            if(isCollapsed)
-              controller.forward();
-            else
-              controller.reverse();
+        appBar: AppBar(
+          leading: IconButton(icon: Icon(Icons.menu), onPressed: () {
+            setState(() {
+              if(isCollapsed)
+                controller.forward();
+              else
+                controller.reverse();
 
-            isCollapsed = !isCollapsed;
-          });
-        }),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-
-            },
-            tooltip: 'Search',
-            icon: Icon(Icons.search),
-            color: Colors.black,
-          )
-        ],
-        elevation: 2,
-        title: Text(
-          'Feed',
-          style: TextStyle(
-            color: Colors.black
-          ),
-        ),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-      ),
-
-      bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
+              isCollapsed = !isCollapsed;
+            });
+          }),
+          actions: <Widget>[
             IconButton(
-                icon: Icon(
-                  CupertinoIcons.news,
-                  size: 22,
-                ),
-                onPressed: () {
-                }
-            ),
-            IconButton(
-                icon: Icon(
-                  Icons.notifications_none,
-                  size: 22,
-                ),
-                onPressed: () {
-                }
+              onPressed: () {
+
+              },
+              tooltip: 'Search',
+              icon: Icon(Icons.search),
+              color: Colors.black,
             )
           ],
+          elevation: 2,
+          title: Text(
+            'Feed',
+            style: TextStyle(
+              color: Colors.black
+            ),
+          ),
+          backgroundColor: Colors.white,
+          centerTitle: true,
         ),
+
+        bottomNavigationBar: BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              IconButton(
+                  icon: Icon(
+                    CupertinoIcons.news,
+                    size: 22,
+                  ),
+                  onPressed: () {
+                  }
+              ),
+              IconButton(
+                  icon: Icon(
+                    Icons.notifications_none,
+                    size: 22,
+                  ),
+                  onPressed: () {
+                  }
+              )
+            ],
+          ),
+        ),
+
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColor.dark,
+        child: Icon(
+          CupertinoIcons.pen,
+          size: 22,
+        ),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PenThoughts()));
+        },
       ),
 
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColor.dark,
-      child: Icon(
-        CupertinoIcons.pen,
-        size: 22,
-      ),
-      onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => PenThoughts()));
-      },
-    ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        body: Stack(
+          children: <Widget>[
+            menu(context, slideAnimation, menuAnimation),
+            AnimatedPositioned(
+              top: 0,
+              bottom: 0,
+              left: isCollapsed ? 0 : 0.6 * MediaQuery.of(context).size.width,
+              right: isCollapsed ? 0 : -0.4 * MediaQuery.of(context).size.width,
+              duration: duration,
+              child: ScaleTransition(
+                scale: scaleAnimation,
+                child: Material(
+                  elevation: isCollapsed ? 0 : 4,
+                  child: SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Consumer<FeedModel>(
+                            builder: (context,feedModel,child) {
+                              if(feedModel.feeds==null)return Center(
 
-      body: Stack(
-        children: <Widget>[
-          menu(context, slideAnimation, menuAnimation),
-          AnimatedPositioned(
-            top: 0,
-            bottom: 0,
-            left: isCollapsed ? 0 : 0.6 * MediaQuery.of(context).size.width,
-            right: isCollapsed ? 0 : -0.4 * MediaQuery.of(context).size.width,
-            duration: duration,
-            child: ScaleTransition(
-              scale: scaleAnimation,
-              child: Material(
-                elevation: isCollapsed ? 0 : 4,
-                child: SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: Consumer<FeedModel>(
-                          builder: (context,feedModel,child) {
-                            if(feedModel.feeds==null)return Center(
+                              );
+                              List<Widget> messages = feedModel.feeds.map((feed) => FeedTile(
+                                feed: feed,
+                              ) ).toList();
 
-                            );
-                            List<Widget> messages = feedModel.feeds.map((feed) => FeedTile(
-                              feed: feed,
-                            ) ).toList();
-
-                            return ListView(
-                              controller: scroll,
-                              children: messages,
-                            );
-                          },
+                              return ListView(
+                                controller: scroll,
+                                children: messages,
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

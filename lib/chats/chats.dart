@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:peddazz/chats/call/call_utilities.dart';
+import 'package:peddazz/chats/call/pickup_layout.dart';
 import 'package:peddazz/chats/call/video_call.dart';
 import 'package:peddazz/chats/call/voice_call.dart';
 import 'package:peddazz/chats/message.dart';
@@ -95,7 +97,19 @@ class ChatUsersState extends State<ChatUsers> {
 
 
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
-    String displayName = arguments['lastname'] + ' ' + arguments['firstname'];
+    String displayName = arguments['firstname'];
+
+    UserData receiver = UserData(
+      userId: arguments['id'],
+      firstName: arguments['firstname'],
+      lastName: arguments['lastname']
+    );
+    UserData sender = UserData(
+      userId: Provider.of<UserModel>(context, listen: false).userData.userId,
+      firstName: Provider.of<UserModel>(context, listen: false).userData.firstName,
+      lastName: Provider.of<UserModel>(context, listen: false).userData.lastName
+    );
+
     if (buildCount == 0) {
       Function getMessages = () async {
         String receiverID = arguments['id'];
@@ -135,163 +149,165 @@ class ChatUsersState extends State<ChatUsers> {
       getMessages();
     }
     buildCount++;
-    return Scaffold(
-      backgroundColor: AppColor.dark,
-      body: Container(
+    return PickupLayout(
+      scaffold: Scaffold(
+        backgroundColor: AppColor.dark,
+        body: Container(
 //        decoration: BoxDecoration(
 //          borderRadius: BorderRadius.only(
 //            topRight: Radius.circular(30),
 //            topLeft: Radius.circular(30)
 //          )
 //        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
 
-            Container(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height*0.06, left: 10, right: 10, bottom: MediaQuery.of(context).size.height*0.02
-              ),
-              decoration: BoxDecoration(
-                color: AppColor.dark
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      IconButton(
+              Container(
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height*0.06, left: 10, right: 10, bottom: MediaQuery.of(context).size.height*0.02
+                ),
+                decoration: BoxDecoration(
+                  color: AppColor.dark
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        IconButton(
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.white60,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }
+                        ),
+
+                        Text(
+                          displayName,
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white60
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Row(
+                      children: <Widget>[
+                        IconButton(
                           icon: Icon(
-                            Icons.arrow_back_ios,
+                            Icons.call,
                             color: Colors.white60,
                           ),
                           onPressed: () {
-                            Navigator.pop(context);
-                          }
-                      ),
-
-                      Text(
-                        displayName,
-                        style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white60
+                            setState(() {
+                              voice = true;
+                            });
+                            channelController.clear();
+                            channelDialog();
+                          },
                         ),
-                      ),
-                    ],
-                  ),
 
-                  Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.call,
-                          color: Colors.white60,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            voice = true;
-                          });
-                          channelController.clear();
-                          channelDialog();
-                        },
-                      ),
-
-                      IconButton(
-                        icon: Icon(
-                          Icons.videocam,
-                          color: Colors.white60,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            voice = false;
-                          });
-                          channelController.clear();
-                          channelDialog();
-                        },
-                      ),
-
-                      IconButton(
-                        icon: Icon(
-                          Icons.more_vert,
-                          color: Colors.white60,
-                        ),
-                        onPressed: null,
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.only(top: 5.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(30),
-                    topLeft: Radius.circular(30)
-                  ),
-                  color: Colors.white
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(30),
-                      topLeft: Radius.circular(30)
-                  ),
-                  child: ListView(
-                    reverse: true,
-                    controller: scroll,
-                    children: buildMessageWidgets(),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-                decoration: BoxDecoration(color: Colors.white),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.photo),
-                      iconSize: 24,
-                      onPressed: null,
-                    ),
-
-                    Expanded(
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 5, right: 5),
-                        child: TextFormField(
-                          textCapitalization: TextCapitalization.sentences,
-                          style: TextStyle(
-                            height: 1,
-                            fontSize: 16
+                        IconButton(
+                          icon: Icon(
+                            Icons.videocam,
+                            color: Colors.white60,
                           ),
-                          keyboardType: TextInputType.multiline,
-                          maxLength: null,
-                          maxLines: null,
-                          onFieldSubmitted: (value) => callBack(),
-                          controller: message,
-                          decoration: InputDecoration.collapsed(
-                            hintText: 'Enter a message',
+                          onPressed: () async =>
+                          CallUtils.dialVideo(
+                            context: context,
+                            callIs: 'video',
+                            to: receiver,
+                            from: sender
                           ),
                         ),
-                      ),
-                    ),
 
-                    IconButton(
-                      icon: Icon(Icons.send),
-                      iconSize: 24,
-                      onPressed: () {
-                        callBack();
-                      },
+                        IconButton(
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: Colors.white60,
+                          ),
+                          onPressed: null,
+                        )
+                      ],
                     )
                   ],
-                ))
-          ],
+                ),
+              ),
+
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(top: 5.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      topLeft: Radius.circular(30)
+                    ),
+                    color: Colors.white
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(30),
+                        topLeft: Radius.circular(30)
+                    ),
+                    child: ListView(
+                      reverse: true,
+                      controller: scroll,
+                      children: buildMessageWidgets(),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.photo),
+                        iconSize: 24,
+                        onPressed: null,
+                      ),
+
+                      Expanded(
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(left: 5, right: 5),
+                          child: TextFormField(
+                            textCapitalization: TextCapitalization.sentences,
+                            style: TextStyle(
+                              height: 1,
+                              fontSize: 16
+                            ),
+                            keyboardType: TextInputType.multiline,
+                            maxLength: null,
+                            maxLines: null,
+                            onFieldSubmitted: (value) => callBack(),
+                            controller: message,
+                            decoration: InputDecoration.collapsed(
+                              hintText: 'Enter a message',
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      IconButton(
+                        icon: Icon(Icons.send),
+                        iconSize: 24,
+                        onPressed: () {
+                          callBack();
+                        },
+                      )
+                    ],
+                  ))
+            ],
+          ),
         ),
       ),
     );
@@ -353,7 +369,6 @@ class ChatUsersState extends State<ChatUsers> {
       await Navigator.push(context,
       MaterialPageRoute(
         builder: (context) => VideoCallScreen(
-          channelName: channelController.text.trim(),
         )
       ));
     }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:peddazz/authentication/login.dart';
 import 'package:peddazz/authentication/signup.dart';
+import 'package:peddazz/chats/call/pickup_layout.dart';
 import 'package:peddazz/chats/chats.dart';
 import 'package:peddazz/colors.dart';
 import 'package:peddazz/feed/feed_page.dart';
@@ -235,133 +236,135 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'PEDDAZZ',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              setState(() {
-                if (isCollapsed)
-                  controller.forward();
-                else
-                  controller.reverse();
+    return PickupLayout(
+      scaffold: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'PEDDAZZ',
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                setState(() {
+                  if (isCollapsed)
+                    controller.forward();
+                  else
+                    controller.reverse();
 
-                isCollapsed = !isCollapsed;
-              });
-            }),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              CupertinoIcons.settings,
-              color: AppColor.icon,
-            ),
-            onPressed: () {
-              Navigator.pushNamed(context, "settings");
-            },
-          )
-        ],
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
-      body: Stack(
-        children: <Widget>[
-          menu(context),
-          AnimatedPositioned(
-            top: 0,
-            bottom: 0,
-            left: isCollapsed ? 0 : 0.6 * MediaQuery.of(context).size.width,
-            right: isCollapsed ? 0 : -0.4 * MediaQuery.of(context).size.width,
-            duration: duration,
-            child: ScaleTransition(
-              scale: scaleAnimation,
-              child: Material(
-                elevation: isCollapsed ? 0 : 8,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    bottomLeft: Radius.circular(12)),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  physics: ClampingScrollPhysics(),
-                  child: Container(
-                    padding: EdgeInsets.only(top: 10, left: 10, right: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          height: 150,
-                          child: PageView(
-                            controller: PageController(viewportFraction: 0.8),
-                            scrollDirection: Axis.horizontal,
-                            pageSnapping: true,
-                            children: <Widget>[
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.lightBlue.shade700,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(24)),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(24)),
-                                  child: Image.asset(
-                                    "images/girl_planning.jpeg",
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                width: 100,
-                                decoration: BoxDecoration(
-                                    color: Colors.limeAccent.shade700,
+                  isCollapsed = !isCollapsed;
+                });
+              }),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                CupertinoIcons.settings,
+                color: AppColor.icon,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, "settings");
+              },
+            )
+          ],
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+        body: Stack(
+          children: <Widget>[
+            menu(context),
+            AnimatedPositioned(
+              top: 0,
+              bottom: 0,
+              left: isCollapsed ? 0 : 0.6 * MediaQuery.of(context).size.width,
+              right: isCollapsed ? 0 : -0.4 * MediaQuery.of(context).size.width,
+              duration: duration,
+              child: ScaleTransition(
+                scale: scaleAnimation,
+                child: Material(
+                  elevation: isCollapsed ? 0 : 8,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      bottomLeft: Radius.circular(12)),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    physics: ClampingScrollPhysics(),
+                    child: Container(
+                      padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            height: 150,
+                            child: PageView(
+                              controller: PageController(viewportFraction: 0.8),
+                              scrollDirection: Axis.horizontal,
+                              pageSnapping: true,
+                              children: <Widget>[
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    color: Colors.lightBlue.shade700,
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(24))),
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(24)),
-                                  child: Image.asset(
-                                    "images/connect.png",
-                                    fit: BoxFit.fill,
+                                        BorderRadius.all(Radius.circular(24)),
                                   ),
-                                ),
-                              ),
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                width: 100,
-                                decoration: BoxDecoration(
-                                    color: Colors.orangeAccent.shade700,
+                                  child: ClipRRect(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(24))),
-                                child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(24)),
-                                  child: Image.asset(
-                                    "images/brainstorm.jpeg",
-                                    fit: BoxFit.fill,
+                                        BorderRadius.all(Radius.circular(24)),
+                                    child: Image.asset(
+                                      "images/girl_planning.jpeg",
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      color: Colors.limeAccent.shade700,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(24))),
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(24)),
+                                    child: Image.asset(
+                                      "images/connect.png",
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                      color: Colors.orangeAccent.shade700,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(24))),
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(24)),
+                                    child: Image.asset(
+                                      "images/brainstorm.jpeg",
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

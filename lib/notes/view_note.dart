@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:peddazz/chats/call/pickup_layout.dart';
 import 'edit_note.dart';
 import 'database.dart';
 import 'note_model.dart';
@@ -29,102 +30,104 @@ class _ViewNotePageState extends State<ViewNotePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          ListView(
-            physics: BouncingScrollPhysics(),
-            children: <Widget>[
-              Container(
-                height: 40,
-              ),
-
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 24, right: 24, top: 40, bottom: 16
+    return PickupLayout(
+      scaffold: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            ListView(
+              physics: BouncingScrollPhysics(),
+              children: <Widget>[
+                Container(
+                  height: 40,
                 ),
-                child: AnimatedOpacity(
-                  opacity: 1,
-                  duration: Duration(milliseconds: 200),
-                  curve: Curves.easeIn,
-                  child: Text(
-                    widget.currentNote.title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 36,
+
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 24, right: 24, top: 40, bottom: 16
+                  ),
+                  child: AnimatedOpacity(
+                    opacity: 1,
+                    duration: Duration(milliseconds: 200),
+                    curve: Curves.easeIn,
+                    child: Text(
+                      widget.currentNote.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 36,
+                      ),
+                      overflow: TextOverflow.visible,
+                      softWrap: true,
                     ),
-                    overflow: TextOverflow.visible,
-                    softWrap: true,
                   ),
                 ),
-              ),
 
-              AnimatedOpacity(
-                duration: Duration(milliseconds: 500),
-                opacity: 1,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 24),
+                AnimatedOpacity(
+                  duration: Duration(milliseconds: 500),
+                  opacity: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 24),
+                    child: Text(
+                      DateFormat.yMd().add_jm().format(widget.currentNote.date),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey.shade500
+                      ),
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 24, top: 36, right: 24, bottom: 24
+                  ),
                   child: Text(
-                    DateFormat.yMd().add_jm().format(widget.currentNote.date),
+                    widget.currentNote.content,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade500
+                      fontSize: 18
+                    ),
+                  ),
+                )
+              ],
+            ),
+
+            ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Container(
+                  height: 80,
+                  color: Theme.of(context).canvasColor.withOpacity(0.3),
+                  child: SafeArea(
+                    child: Row(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+
+                        Spacer(),
+
+                        IconButton(
+                            onPressed: edit,
+                            icon: Icon(Icons.mode_edit)
+                        ),
+
+                        IconButton(
+                            icon: Icon(Icons.delete_outline),
+                            onPressed: () {
+                              delete();
+                            }
+                        )
+                      ],
                     ),
                   ),
                 ),
               ),
-
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 24, top: 36, right: 24, bottom: 24
-                ),
-                child: Text(
-                  widget.currentNote.content,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18
-                  ),
-                ),
-              )
-            ],
-          ),
-
-          ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-              child: Container(
-                height: 80,
-                color: Theme.of(context).canvasColor.withOpacity(0.3),
-                child: SafeArea(
-                  child: Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-
-                      Spacer(),
-
-                      IconButton(
-                          onPressed: edit,
-                          icon: Icon(Icons.mode_edit)
-                      ),
-
-                      IconButton(
-                          icon: Icon(Icons.delete_outline),
-                          onPressed: () {
-                            delete();
-                          }
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:peddazz/chats/call/pickup_layout.dart';
 import 'package:peddazz/colors.dart';
 import 'package:peddazz/notes/database.dart';
 import 'package:peddazz/notes/edit_note.dart';
@@ -40,43 +41,44 @@ class _NotesScreenState extends State<NotesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          gotoEditNote();
-        },
-        child: Icon(Icons.add),
-        backgroundColor: AppColor.dark,
-      ),
-      
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-        },
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 200),
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      
-                      Text('Notes', style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height*0.035
-                      ),)
-                    ],
-                  ),
-                  IconButton(icon: Icon(Icons.search), onPressed: null),
+    return PickupLayout(
+      scaffold: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            gotoEditNote();
+          },
+          child: Icon(Icons.add),
+          backgroundColor: AppColor.dark,
+        ),
+
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 200),
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+
+                        Text('Notes', style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.height*0.035
+                        ),)
+                      ],
+                    ),
+                    IconButton(icon: Icon(Icons.search), onPressed: null),
 
 //                  Container(
 //                    height: MediaQuery.of(context).size.height*0.04,
@@ -90,35 +92,36 @@ class _NotesScreenState extends State<NotesScreen> {
 //                      ),
 //                    ),
 //                  )
-                ],
-              ),
-
-              Container(
-                height: 40,
-              ),
-              notesList.isEmpty ? Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height*0.35
+                  ],
                 ),
-                child: Container(
-                  child: Center(
-                    child: Text(
-                      'Start writing...',
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.grey.shade500
+
+                Container(
+                  height: 40,
+                ),
+                notesList.isEmpty ? Padding(
+                  padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height*0.35
+                  ),
+                  child: Container(
+                    child: Center(
+                      child: Text(
+                        'Start writing...',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.grey.shade500
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ) : Container(
-                child: Column(
-                  children: <Widget>[
-                    ...buildNoteList()
-                  ],
-                ),
-              )
-            ],
+                ) : Container(
+                  child: Column(
+                    children: <Widget>[
+                      ...buildNoteList()
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peddazz/chats/call/pickup_layout.dart';
 import 'package:peddazz/colors.dart';
 import 'package:peddazz/models/user_model.dart';
 import 'package:provider/provider.dart';
@@ -41,35 +42,37 @@ class _PlannerState extends State<Planner> {
   Widget build(BuildContext context) {
     String user = Provider.of<UserModel>(context).userData.userId;
     Firestore.instance.collection('user').document(user).collection('Planner');
-    return Scaffold(
-      body: SfCalendar(
-        view: CalendarView.month,
-        dataSource: MeetingDataSource(getDataSource()),
-        monthViewSettings: MonthViewSettings(
-          appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-          appointmentDisplayCount: 10,
-          showAgenda: true
-        ),
+    return PickupLayout(
+      scaffold: Scaffold(
+        body: SfCalendar(
+          view: CalendarView.month,
+          dataSource: MeetingDataSource(getDataSource()),
+          monthViewSettings: MonthViewSettings(
+            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+            appointmentDisplayCount: 10,
+            showAgenda: true
+          ),
 
-        cellBorderColor: AppColor.appBar,
-        todayHighlightColor: AppColor.background,
-        //backgroundColor: AppColor.primary,
-        controller: controller,
-        timeSlotViewSettings: TimeSlotViewSettings(
-          nonWorkingDays: <int>[DateTime.saturday, DateTime.sunday]
+          cellBorderColor: AppColor.appBar,
+          todayHighlightColor: AppColor.background,
+          //backgroundColor: AppColor.primary,
+          controller: controller,
+          timeSlotViewSettings: TimeSlotViewSettings(
+            nonWorkingDays: <int>[DateTime.saturday, DateTime.sunday]
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColor.primary,
-        child: Icon(
-          Icons.add
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColor.primary,
+          child: Icon(
+            Icons.add
+          ),
+          onPressed: () {
+            eventController.clear();
+            startTimeController.clear();
+            durationController.clear();
+            meetingDialog();
+          }
         ),
-        onPressed: () {
-          eventController.clear();
-          startTimeController.clear();
-          durationController.clear();
-          meetingDialog();
-        }
       ),
     );
   }

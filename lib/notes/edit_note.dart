@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
+import 'package:peddazz/chats/call/pickup_layout.dart';
 import 'database.dart';
 import 'note_model.dart';
 
@@ -46,109 +47,111 @@ class _EditNoteState extends State<EditNote> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          ListView(
-            children: <Widget>[
-              Container(height: 80,),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  focusNode: titleFocus,
-                  autofocus: true,
-                  controller: titleController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  onSubmitted: (text) {
-                    titleFocus.unfocus();
-                    FocusScope.of(context).requestFocus(contentFocus);
-                  },
-                  onChanged: null, //FOR NOW
-                  textInputAction: TextInputAction.next,
-                  style: prefix0.TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w700
-                  ),
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'Enter a title',
-                    hintStyle: prefix0.TextStyle(
-                      color: Colors.grey.shade400,
+    return PickupLayout(
+      scaffold: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            ListView(
+              children: <Widget>[
+                Container(height: 80,),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: TextField(
+                    focusNode: titleFocus,
+                    autofocus: true,
+                    controller: titleController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    onSubmitted: (text) {
+                      titleFocus.unfocus();
+                      FocusScope.of(context).requestFocus(contentFocus);
+                    },
+                    onChanged: null, //FOR NOW
+                    textInputAction: TextInputAction.next,
+                    style: prefix0.TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w700
                     ),
-                    border: InputBorder.none
+                    decoration: InputDecoration.collapsed(
+                      hintText: 'Enter a title',
+                      hintStyle: prefix0.TextStyle(
+                        color: Colors.grey.shade400,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700
+                      ),
+                      border: InputBorder.none
+                    ),
                   ),
                 ),
-              ),
 
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: TextField(
-                  focusNode: contentFocus,
-                  controller: contentController,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  onChanged: null,
-                  style: prefix0.TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500
-                  ),
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'Enter note...',
-                    hintStyle: prefix0.TextStyle(
-                      color: Colors.grey.shade400,
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: TextField(
+                    focusNode: contentFocus,
+                    controller: contentController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    onChanged: null,
+                    style: prefix0.TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500
                     ),
-                    border: InputBorder.none
+                    decoration: InputDecoration.collapsed(
+                      hintText: 'Enter note...',
+                      hintStyle: prefix0.TextStyle(
+                        color: Colors.grey.shade400,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500
+                      ),
+                      border: InputBorder.none
+                    ),
                   ),
-                ),
-              )
-            ],
-          ),
+                )
+              ],
+            ),
 
-          ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-              child: Container(
-                height: 80,
-                color: Theme.of(context).canvasColor.withOpacity(0.3),
-                child: SafeArea(
-                  child: Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-
-                      Spacer(),
-
-                      FlatButton(
-                          onPressed: save,
-                          child: Text('Save')
-                      ),
-
-                      IconButton(
-                          icon: Icon(Icons.attach_file),
-                          onPressed: null
-                      ),
-
-                      IconButton(
-                          icon: Icon(Icons.delete_outline),
+            ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Container(
+                  height: 80,
+                  color: Theme.of(context).canvasColor.withOpacity(0.3),
+                  child: SafeArea(
+                    child: Row(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.arrow_back),
                           onPressed: () {
-                            delete();
-                          }
-                      )
-                    ],
+                            Navigator.pop(context);
+                          },
+                        ),
+
+                        Spacer(),
+
+                        FlatButton(
+                            onPressed: save,
+                            child: Text('Save')
+                        ),
+
+                        IconButton(
+                            icon: Icon(Icons.attach_file),
+                            onPressed: null
+                        ),
+
+                        IconButton(
+                            icon: Icon(Icons.delete_outline),
+                            onPressed: () {
+                              delete();
+                            }
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
