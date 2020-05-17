@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:peddazz/chats/call/call.dart';
 import 'package:peddazz/chats/call/pickup_screen.dart';
-import 'package:peddazz/chats/call/video_call.dart';
 import 'package:peddazz/models/user_model.dart';
 import 'package:provider/provider.dart';
+import 'call_method.dart';
 
 class PickupLayout extends StatelessWidget {
 

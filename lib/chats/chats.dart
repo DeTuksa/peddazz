@@ -204,13 +204,13 @@ class ChatUsersState extends State<ChatUsers> {
                             Icons.call,
                             color: Colors.white60,
                           ),
-                          onPressed: () {
-                            setState(() {
-                              voice = true;
-                            });
-                            channelController.clear();
-                            channelDialog();
-                          },
+                          onPressed: () async =>
+                            CallUtils.dialVoice(
+                              from: sender,
+                              to: receiver,
+                              context: context,
+                              callIs: 'audio'
+                            )
                         ),
 
                         IconButton(
@@ -313,51 +313,6 @@ class ChatUsersState extends State<ChatUsers> {
     );
   }
 
-  Future<void> channelDialog() async {
-    return showDialog<void> (
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Channel Name'
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                TextFormField(
-                  controller: channelController,
-                  decoration: InputDecoration(
-                    errorText: validateError ? 'Channel name is Empty' : null
-                  ),
-                )
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('ABORT'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            FlatButton(
-              child: Text('CALL'),
-              onPressed: voice ?
-              () async {
-                Navigator.pop(context);
-                onVoiceCall();
-              }: () async {
-                Navigator.pop(context);
-                onVideoCall();
-              },
-            )
-          ],
-        );
-      }
-    );
-  }
-
   Future<void> onVideoCall() async {
     setState(() {
       channelController.text.isEmpty ?
@@ -385,7 +340,6 @@ class ChatUsersState extends State<ChatUsers> {
       await Navigator.push(context,
           MaterialPageRoute(
               builder: (context) => VoiceCallScreen(
-                channelName: channelController.text.trim(),
               )
           ));
     }

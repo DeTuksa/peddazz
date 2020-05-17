@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:peddazz/chats/call/call.dart';
 import 'package:peddazz/chats/call/video_call.dart';
+import 'package:peddazz/chats/call/voice_call.dart';
+import 'call_method.dart';
 
 class PickUpScreen extends StatefulWidget {
 
@@ -20,6 +23,7 @@ class _PickUpScreenState extends State<PickUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FlutterRingtonePlayer.playRingtone();
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -68,6 +72,7 @@ class _PickUpScreenState extends State<PickUpScreen> {
                   color: Colors.redAccent,
                   onPressed: () async {
                     await callMethods.endCall(call: widget.call);
+                    FlutterRingtonePlayer.stop();
                   },
                 ),
                 IconButton(
@@ -82,6 +87,12 @@ class _PickUpScreenState extends State<PickUpScreen> {
                     MaterialPageRoute(
                       builder: (context) =>
                           VideoCallScreen(call: widget.call,)
+                    )
+                  ) : widget.call.isCall == 'audio' ? Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          VoiceCallScreen(call: widget.call,)
                     )
                   ) : {},
                 )

@@ -3,11 +3,13 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:peddazz/chats/call/settings.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:peddazz/chats/call/config.dart';
 import 'package:peddazz/colors.dart';
 import 'package:peddazz/models/user_model.dart';
 import 'package:provider/provider.dart';
 import 'call.dart';
+import 'call_method.dart';
 
 class VideoCallScreen extends StatefulWidget {
 
@@ -104,6 +106,27 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       });
     };
 
+    AgoraRtcEngine.onRejoinChannelSuccess = (String string, int a, int b) {
+      setState(() {
+        final info = 'onRejoinChannelSuccess: $string';
+        infoStrings.add(info);
+      });
+    };
+
+    AgoraRtcEngine.onRegisteredLocalUser = (String s, int i) {
+      setState(() {
+        final info = 'onRegisteredLocalUser: string: s, i: ${i.toString()}';
+        infoStrings.add(info);
+      });
+    };
+
+    AgoraRtcEngine.onUpdatedUserInfo = (AgoraUserInfo userInfo, int i) {
+      setState(() {
+        final info = 'onUpdatedUserInfo: ${userInfo.toString()}';
+        infoStrings.add(info);
+      });
+    };
+
     AgoraRtcEngine.onUserJoined = (int uid, int elapsed) {
       setState(() {
         final info = 'userJoined: $uid';
@@ -117,6 +140,20 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         final info = 'UserOffline: $uid';
         infoStrings.add(info);
         users.remove(uid);
+      });
+    };
+
+    AgoraRtcEngine.onRegisteredLocalUser = (String s, int i) {
+      setState(() {
+        final info = 'onRegisteredLocalUser: string: s, i: ${i.toString()}';
+        infoStrings.add(info);
+      });
+    };
+
+    AgoraRtcEngine.onConnectionLost = () {
+      setState(() {
+        final info = 'onConnectionLost';
+        infoStrings.add(info);
       });
     };
 
@@ -319,6 +356,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FlutterRingtonePlayer.stop();
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade800,
       body: Center(
@@ -331,40 +369,5 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         ),
       ),
     );
-  }
-}
-
-class CallMethods {
-  final CollectionReference callCollection = Firestore.instance.collection('call');
-  Stream<DocumentSnapshot> callStream({String uid}) =>
-      callCollection.document(uid).snapshots();
-
-  Future<bool> makeVideoCall({Call call}) async {
-    try {
-      call.hasDialled = true;
-      call.isCall = 'video';
-      Map<String, dynamic> hasDialledMap = call.toMap(call);
-      call.hasDialled = false;
-      call.isCall = 'video';
-      Map<String, dynamic> hasNotDialledMap = call.toMap(call);
-
-      await callCollection.document(call.callerId).setData(hasDialledMap);
-      await callCollection.document(call.receiverId).setData(hasNotDialledMap);
-      return true;
-    } catch (e) {
-      print(e);
-      return false;
-    }
-  }
-
-  Future<bool> endCall({Call call}) async {
-    try {
-      await callCollection.document(call.callerId).delete();
-      await callCollection.document(call.receiverId).delete();
-      return true;
-    } catch (e) {
-      print(e);
-      return false;
-    }
   }
 }
