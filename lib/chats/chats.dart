@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,6 +24,10 @@ class ChatUsers extends StatefulWidget {
 
 class ChatUsersState extends State<ChatUsers> {
 
+  bool showSticker;
+
+  FocusNode textFocus = FocusNode();
+
   final channelController = TextEditingController();
   bool validateError = false;
   bool voice = false;
@@ -38,6 +43,13 @@ class ChatUsersState extends State<ChatUsers> {
   StreamSubscription receiverSub;
   StreamSubscription senderSub;
   int buildCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    showSticker = false;
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -45,6 +57,25 @@ class ChatUsersState extends State<ChatUsers> {
       receiverSub.cancel();
       senderSub.cancel();
     } catch (e) {}
+  }
+
+  Widget buildSticker() {
+    return EmojiPicker(
+      rows: 7,
+      columns: 10,
+      buttonMode: ButtonMode.CUPERTINO,
+      onEmojiSelected: (emoji, category) {
+        final value = emoji.emoji;
+        int offset = message.selection.base.offset;
+        message.value = TextEditingValue(
+          text: message.text + value,
+          selection: TextSelection.fromPosition(
+            TextPosition(offset: offset)
+          )
+        );
+      },
+      indicatorColor: AppColor.login1,
+    );
   }
 
   @override
@@ -270,9 +301,18 @@ class ChatUsersState extends State<ChatUsers> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       IconButton(
-                        icon: Icon(Icons.photo),
+                        icon: Icon(Icons.insert_emoticon),
                         iconSize: 24,
-                        onPressed: null,
+                        onPressed: () {
+                          setState(() {
+                            showSticker = !showSticker;
+                          });
+                          if(showSticker) {
+                            FocusScope.of(context).requestFocus(new FocusNode());
+                          } else {
+                            FocusScope.of(context).requestFocus(textFocus);
+                          }
+                        }
                       ),
 
                       Expanded(
@@ -280,6 +320,10 @@ class ChatUsersState extends State<ChatUsers> {
                           padding:
                               const EdgeInsets.only(left: 5, right: 5),
                           child: TextFormField(
+                            onTap: () {
+                              showSticker = false;
+                            },
+                            focusNode: textFocus,
                             textCapitalization: TextCapitalization.sentences,
                             style: TextStyle(
                               height: 1,
@@ -305,7 +349,8 @@ class ChatUsersState extends State<ChatUsers> {
                         },
                       )
                     ],
-                  ))
+                  )),
+              showSticker ? buildSticker() : Container()
             ],
           ),
         ),

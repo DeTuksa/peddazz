@@ -15,54 +15,6 @@ class Message extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-//      child: Column(
-//        crossAxisAlignment:
-//            person ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-//        children: <Widget>[
-////          Padding(
-////            padding: const EdgeInsets.only(left: 5, right: 5),
-////            child: Text(
-////              from,
-////              style: TextStyle(color: Colors.grey),
-////            ),
-////          ),
-//          Padding(
-//            padding:
-//            person ? const EdgeInsets.only(
-//              left: 50,
-//            right: 10,
-//            bottom: 10
-//            ) : const EdgeInsets.only(
-//              left: 10,
-//              right: 50,
-//              bottom: 10
-//              ),
-//            child: Material(
-//              color: person ? AppColor.login1 : AppColor.appBar,
-//              borderRadius: person ? BorderRadius.only(
-//                topLeft: Radius.circular(10),
-//                topRight: Radius.circular(10),
-//                bottomLeft: Radius.circular(10)
-//              ) : BorderRadius.only(
-//                  topLeft: Radius.circular(10),
-//                  topRight: Radius.circular(10),
-//                  bottomRight: Radius.circular(10)
-//              ) ,
-//              elevation: 2.0,
-//              child: Container(
-//                //width: MediaQuery.of(context).size.width*0.75,
-//                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-//                child: Text(
-//                  text,
-//                  style: TextStyle(
-//                    color: Colors.white
-//                  ),
-//                  ),
-//              ),
-//            ),
-//          )
-//        ],
-//      ),
     child: Container(
       child: Column(
         crossAxisAlignment:
